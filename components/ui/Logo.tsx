@@ -7,8 +7,6 @@ type LogoProps = {
   className?: string;
 };
 
-console.log(process.env.DATABSE_URL);
-
 export default function Logo({ variant = "light", className }: LogoProps) {
   let baseClass =
     "inline-flex items-center gap-x-2 font-display tracking-wider text-2xl md:text-4xl focus:outline-none";
