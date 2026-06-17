@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.*.*"],
   images: {
+    remotePatterns: [new URL("https://lh3.googleusercontent.com/**")],
     qualities: [25, 50, 75, 100],
   },
 };
