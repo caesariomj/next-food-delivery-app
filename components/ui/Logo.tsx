@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { cn } from "@/lib/utils/cn";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "My App";
@@ -17,31 +18,31 @@ export default function Logo({ variant = "light", className }: LogoProps) {
     case "light":
       baseClass += " text-foreground";
       highlightClass +=
-        " bg-foreground text-primary transition-colors duration-300 ease-in-out group-hover:text-background group-focus:text-background";
+        " bg-foreground text-primary transition-colors duration-200 ease-in-out group-hover:text-background group-focus:text-background";
       break;
 
     case "dark":
       baseClass += " text-background";
       highlightClass +=
-        " bg-background text-foreground transition-colors duration-300 ease-in-out group-hover:bg-primary group-focus:bg-primary";
+        " bg-background text-foreground transition-colors duration-200 ease-in-out group-hover:bg-primary group-focus:bg-primary";
       break;
 
     case "primary":
       baseClass += " text-background";
       highlightClass +=
-        " bg-primary text-foreground transition-colors duration-300 ease-in-out group-hover:bg-background group-focus:bg-background";
+        " bg-primary text-foreground transition-colors duration-200 ease-in-out group-hover:bg-background group-focus:bg-background";
       break;
 
     case "secondary":
       baseClass += " text-background";
       highlightClass +=
-        " bg-secondary text-foreground transition-colors duration-300 ease-in-out group-hover:bg-background group-focus:bg-background";
+        " bg-secondary text-foreground transition-colors duration-200 ease-in-out group-hover:bg-background group-focus:bg-background";
       break;
 
     default:
       baseClass += " text-background";
       highlightClass +=
-        " bg-background text-foreground transition-colors duration-300 ease-in-out group-hover:bg-primary group-focus:bg-primary";
+        " bg-background text-foreground transition-colors duration-200 ease-in-out group-hover:bg-primary group-focus:bg-primary";
       break;
   }
 
