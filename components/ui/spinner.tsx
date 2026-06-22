@@ -1,3 +1,5 @@
+"use client";
+
 import { RiLoader3Line } from "@remixicon/react";
 
 import { cn } from "@/lib/utils/cn";
