@@ -1,13 +1,10 @@
 model User {
-  id                          String        @id @unique @default(uuid())
+  id                          String        @id
   email                       String        @unique
   emailVerified               Boolean       @default(false) @map("email_verified")
-  password                    String?
-  name                        String?
+  name                        String
   phone                       String?       @unique
   image                       String?
-  passwordResetToken          String?       @unique @map("password_reset_token")
-  passwordResetExpiresAt      DateTime?     @map("password_reset_expires_at")
   createdAt                   DateTime      @default(now()) @map("created_at")
   updatedAt                   DateTime      @updatedAt @map("updated_at")
   deletedAt                   DateTime?     @map("deleted_at")

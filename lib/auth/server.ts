@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth/minimal";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import prisma from "../prisma";
+
+import prisma from "@/lib/prisma";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -16,15 +17,15 @@ export const auth = betterAuth({
       redirectURI: `${process.env.BETTER_AUTH_URL}/api/auth/callback/google`,
     },
   },
-  trustedOrigins: [process.env.BETTER_AUTH_URL as string],
-  advanced: {
-    database: {
-      generateId: (options) => {
-        if (options.model === "user" || options.model === "users") {
-          return false;
-        }
-
-        return crypto.randomUUID();
+  user: {
+    additionalFields: {
+      phone: {
+        type: "string",
+        required: false,
+      },
+      deletedAt: {
+        type: "date",
+        required: false,
       },
     },
   },
