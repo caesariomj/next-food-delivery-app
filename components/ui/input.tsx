@@ -19,7 +19,7 @@ function Input({ className, type, hasError, ...props }: InputProps) {
           type={showPassword ? "text" : "password"}
           data-slot="input"
           className={cn(
-            "peer h-14 w-full min-w-0 border-3 bg-transparent px-6 py-3 text-base font-semibold transition-all duration-200 ease-in-out outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:font-semibold placeholder:text-muted-foreground focus-visible:shadow-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50",
+            "peer h-14 w-full min-w-0 border-4 bg-transparent px-6 py-3 text-base font-semibold transition-all duration-200 ease-in-out outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:font-semibold placeholder:text-muted-foreground focus-visible:shadow-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50",
             hasError
               ? "border-destructive neo-shadow-destructive placeholder:text-destructive/75 focus-visible:border-destructive"
               : "border-foreground neo-shadow placeholder:text-foreground/75 focus-visible:border-primary",
@@ -51,7 +51,7 @@ function Input({ className, type, hasError, ...props }: InputProps) {
         type={type}
         data-slot="input"
         className={cn(
-          "h-14 w-full min-w-0 border-3 bg-transparent px-6 py-3 text-base font-semibold transition-all outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:font-semibold placeholder:text-muted-foreground focus-visible:shadow-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50",
+          "h-14 w-full min-w-0 border-4 bg-transparent px-6 py-3 text-base font-semibold transition-all outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:font-semibold placeholder:text-muted-foreground focus-visible:shadow-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50",
           hasError
             ? "border-destructive neo-shadow-destructive placeholder:text-destructive/75 focus-visible:border-destructive"
             : "border-foreground neo-shadow placeholder:text-foreground/75 focus-visible:border-primary",
