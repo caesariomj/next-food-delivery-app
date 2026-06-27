@@ -11,7 +11,23 @@ model User {
 
   sessions                    Session[]
   accounts                    Account[]
+  roles                       UserRole[]    @relation("UserRoles")
+  assigned                    UserRole[]    @relation("AssignedRoles")
 
   @@index([createdAt])
   @@map("users")
+}
+
+model UserRole {
+  userId                      String        @map("user_id")
+  roleId                      String        @map("role_id")
+  assignedById                String?       @map("assigned_by_id")
+  assignedAt                  DateTime      @default(now()) @map("assigned_at")
+
+  user                        User          @relation(name: "UserRoles", fields: [userId], references: [id], onDelete: Cascade)
+  role                        Role          @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  assignedBy                  User?         @relation(name: "AssignedRoles",fields: [assignedById], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
 }
