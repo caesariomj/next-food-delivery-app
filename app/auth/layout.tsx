@@ -14,9 +14,9 @@ export default function AuthLayout({
   const pathname = usePathname();
 
   return pathname === "/auth/error" ? (
-    children
+    <main>{children}</main>
   ) : (
-    <div className="flex min-h-screen flex-col lg:flex-row-reverse">
+    <main className="flex min-h-screen flex-col lg:flex-row-reverse">
       <section className="flex min-h-screen w-full flex-col justify-center bg-background p-8 lg:w-3/5 lg:p-16">
         <div className="mb-8 flex items-center justify-between lg:mb-0 lg:hidden">
           <Logo variant="light" />
@@ -120,6 +120,6 @@ export default function AuthLayout({
           </p>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

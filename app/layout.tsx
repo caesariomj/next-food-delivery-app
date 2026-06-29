@@ -41,7 +41,7 @@ export default function RootLayout({
       )}
     >
       <body className="flex min-h-full flex-col">
-        <main>{children}</main>
+        {children}
         <Toaster
           position="bottom-right"
           toastOptions={{
