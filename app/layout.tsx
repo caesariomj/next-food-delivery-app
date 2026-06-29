@@ -46,7 +46,7 @@ export default function RootLayout({
           position="bottom-right"
           toastOptions={{
             classNames: {
-              toast: "rounded-none! border-3! border-foreground! neo-shadow!",
+              toast: "rounded-none! border-4! border-foreground! neo-shadow!",
               title: "text-foreground! font-semibold!",
               description: "text-foreground!",
             },
