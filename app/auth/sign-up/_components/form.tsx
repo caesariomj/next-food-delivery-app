@@ -3,8 +3,9 @@
 import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { RiGoogleFill } from "@remixicon/react";
+import * as Sentry from "@sentry/nextjs";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -56,16 +57,25 @@ export default function SignUpForm() {
   }, [state.success, state.data, router]);
 
   const signUpWithGoogle = async () => {
-    try {
-      setIsGoogleLoading(true);
+    if (isGoogleLoading) return;
+    setIsGoogleLoading(true);
 
-      await authClient.signIn.social({
+    try {
+      const { error } = await authClient.signIn.social({
         provider: "google",
         callbackURL: "/",
         newUserCallbackURL: "/",
         errorCallbackURL: "/auth/error",
       });
-    } catch (error) {
+
+      if (error) {
+        toast.error(error.message);
+        Sentry.captureException(new Error(error.message), {
+          extra: { status: error.status, statusText: error.statusText },
+        });
+      }
+    } catch (err: unknown) {
+      Sentry.captureException(err);
       toast.error("Something went wrong on our end. Please try again later.");
     } finally {
       setIsGoogleLoading(false);

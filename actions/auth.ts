@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { isAPIError } from "better-auth/api";
+import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth/server";
@@ -82,9 +83,14 @@ export async function signInAction(
     };
   } catch (error) {
     if (isAPIError(error)) {
+      Sentry.captureException(error, {
+        tags: { action: "signIn", statusCode: error.statusCode },
+        extra: { status: error.status },
+      });
       return { success: false, message: error.message };
     }
 
+    Sentry.captureException(error);
     return {
       success: false,
       message: "Something went wrong on our end. Please try again later.",
@@ -150,15 +156,17 @@ export async function signUpAction(
       if (error.statusCode === 422 && error.status === "UNPROCESSABLE_ENTITY") {
         return {
           success: false,
-          errors: {
-            email: [{ message: "Email already exists!" }],
-          },
+          errors: { email: [{ message: "Email already exists!" }] },
         };
-      } else {
-        return { success: false, message: error.message };
       }
+
+      Sentry.captureException(error, {
+        tags: { action: "signUp", statusCode: error.statusCode },
+      });
+      return { success: false, message: error.message };
     }
 
+    Sentry.captureException(error);
     return {
       success: false,
       message: "Something went wrong on our end. Please try again later.",
