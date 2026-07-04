@@ -1,7 +1,9 @@
 import { betterAuth } from "better-auth/minimal";
+import { nextCookies } from "better-auth/next-js";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 
 import prisma from "@/lib/prisma";
+import { hashPassword, verifyPassword } from "@/lib/auth/password";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -9,6 +11,14 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    password: {
+      hash: async (password) => {
+        return await hashPassword(password);
+      },
+      verify: async ({ hash, password }) => {
+        return await verifyPassword(password, hash);
+      },
+    },
   },
   socialProviders: {
     google: {
@@ -29,4 +39,23 @@ export const auth = betterAuth({
       },
     },
   },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          const role = await prisma.role.findUnique({
+            where: { name: "customer" },
+          });
+
+          if (role) {
+            await prisma.userRole.create({
+              data: { userId: user.id, roleId: role.id },
+            });
+          }
+        },
+      },
+    },
+  },
+  plugins: [nextCookies()],
+  trustedOrigins: [process.env.BETTER_AUTH_URL as string],
 });
