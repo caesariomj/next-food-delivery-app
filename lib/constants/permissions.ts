@@ -1,6 +1,12 @@
 export const PERMISSIONS = {
-  admin: [],
-  merchant: [],
+  admin: [
+    "dashboard.access",
+    "cuisines.view",
+    "cuisines.create",
+    "cuisines.update",
+    "cuisines.delete",
+  ],
+  merchant: ["dashboard.access"],
   customer: [],
 } as const;
 
