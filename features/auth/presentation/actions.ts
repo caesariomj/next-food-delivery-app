@@ -1,12 +1,12 @@
 "use server";
 
-import { headers } from "next/headers";
 import { isAPIError } from "better-auth/api";
-import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
 
-import { auth } from "@/lib/auth/server";
-import { signInSchema, signUpSchema } from "@/lib/validations/user";
+import { signInWithEmail } from "../application/sign-in-with-email";
+import { signUp } from "../application/sign-up";
+import { reportAuthError } from "../infrastructure/auth-error-monitoring";
+import { signInSchema, signUpSchema } from "../validation/auth-schema";
 
 type FieldError = {
   message: string;
@@ -20,7 +20,11 @@ export type SignInState = {
     rememberMe?: FieldError[];
   };
   message?: string;
-  data?: { user: { name: string } } | null;
+  data?: {
+    user: {
+      name: string;
+    };
+  } | null;
 };
 
 export type SignUpState = {
@@ -33,7 +37,11 @@ export type SignUpState = {
     acceptTermsAndConditions?: FieldError[];
   };
   message?: string;
-  data?: { user: { name: string } } | null;
+  data?: {
+    user: {
+      name: string;
+    };
+  } | null;
 };
 
 export async function signInAction(
@@ -49,29 +57,30 @@ export async function signInAction(
   const validated = signInSchema.safeParse(rawData);
 
   if (!validated.success) {
-    const fieldErrors = z.flattenError(validated.error).fieldErrors;
+    const errors = z.flattenError(validated.error).fieldErrors;
 
     return {
       success: false,
       errors: {
-        email: fieldErrors.email?.map((message) => ({ message })),
-        password: fieldErrors.password?.map((message) => ({ message })),
-        rememberMe: fieldErrors.rememberMe?.map((message) => ({ message })),
+        email: errors.email?.map((message) => ({
+          message,
+        })),
+        password: errors.password?.map((message) => ({
+          message,
+        })),
+        rememberMe: errors.rememberMe?.map((message) => ({
+          message,
+        })),
       },
     };
   }
 
   try {
-    const { email, password, rememberMe } = validated.data;
-
-    const result = await auth.api.signInEmail({
-      body: {
-        email,
-        password,
-        rememberMe,
-      },
-      headers: await headers(),
-    });
+    const result = await signInWithEmail(
+      validated.data.email,
+      validated.data.password,
+      validated.data.rememberMe ?? false
+    );
 
     return {
       success: true,
@@ -83,14 +92,23 @@ export async function signInAction(
     };
   } catch (error) {
     if (isAPIError(error)) {
-      Sentry.captureException(error, {
-        tags: { action: "signIn", statusCode: error.statusCode },
-        extra: { status: error.status },
+      reportAuthError({
+        context: "credentials_sign_in",
+        statusCode: error.statusCode,
+        error,
       });
-      return { success: false, message: error.message };
+
+      return {
+        success: false,
+        message: error.message,
+      };
     }
 
-    Sentry.captureException(error);
+    reportAuthError({
+      context: "credentials_sign_in",
+      error,
+    });
+
     return {
       success: false,
       message: "Something went wrong on our end. Please try again later.",
@@ -125,7 +143,9 @@ export async function signUpAction(
           message,
         })),
         acceptTermsAndConditions: fieldErrors.acceptTermsAndConditions?.map(
-          (message) => ({ message })
+          (message) => ({
+            message,
+          })
         ),
       },
     };
@@ -134,14 +154,7 @@ export async function signUpAction(
   try {
     const { name, email, password } = validated.data;
 
-    const result = await auth.api.signUpEmail({
-      body: {
-        name,
-        email,
-        password,
-      },
-      headers: await headers(),
-    });
+    const result = await signUp(name, email, password);
 
     return {
       success: true,
@@ -156,17 +169,33 @@ export async function signUpAction(
       if (error.statusCode === 422 && error.status === "UNPROCESSABLE_ENTITY") {
         return {
           success: false,
-          errors: { email: [{ message: "Email already exists!" }] },
+          errors: {
+            email: [
+              {
+                message: "Email already exists!",
+              },
+            ],
+          },
         };
       }
 
-      Sentry.captureException(error, {
-        tags: { action: "signUp", statusCode: error.statusCode },
+      reportAuthError({
+        context: "sign_up",
+        statusCode: error.statusCode,
+        error,
       });
-      return { success: false, message: error.message };
+
+      return {
+        success: false,
+        message: error.message,
+      };
     }
 
-    Sentry.captureException(error);
+    reportAuthError({
+      context: "sign_up",
+      error,
+    });
+
     return {
       success: false,
       message: "Something went wrong on our end. Please try again later.",

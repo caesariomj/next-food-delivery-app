@@ -3,8 +3,8 @@
 import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import { RiGoogleFill } from "@remixicon/react";
-import * as Sentry from "@sentry/nextjs";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -19,8 +19,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 
-import { authClient } from "@/lib/auth/client";
-import { SignUpState, signUpAction } from "@/actions/auth";
+import { type SignUpState, signUpAction } from "./actions";
+import { signInWithGoogle } from "../application/sign-in-with-google";
+import { reportAuthError } from "../infrastructure/auth-error-monitoring";
 
 const initialState: SignUpState = {
   success: false,
@@ -36,6 +37,7 @@ export default function SignUpForm() {
     signUpAction,
     initialState
   );
+
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const router = useRouter();
@@ -56,31 +58,36 @@ export default function SignUpForm() {
     router.push("/");
   }, [state.success, state.data, router]);
 
-  const signUpWithGoogle = async () => {
+  async function handleGoogleSignIn() {
     if (isGoogleLoading) return;
+
     setIsGoogleLoading(true);
 
     try {
-      const { error } = await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/",
-        newUserCallbackURL: "/",
-        errorCallbackURL: "/auth/error",
-      });
+      const { error } = await signInWithGoogle();
 
       if (error) {
+        const errorCode = error.code;
+
         toast.error(error.message);
-        Sentry.captureException(new Error(error.message), {
-          extra: { status: error.status, statusText: error.statusText },
+
+        reportAuthError({
+          context: "google_sign_in",
+          errorCode,
+          error,
         });
       }
-    } catch (err: unknown) {
-      Sentry.captureException(err);
+    } catch (error) {
+      reportAuthError({
+        context: "google_sign_in",
+        error,
+      });
+
       toast.error("Something went wrong on our end. Please try again later.");
     } finally {
       setIsGoogleLoading(false);
     }
-  };
+  }
 
   return (
     <form action={formAction} className="mb-8 space-y-8">
@@ -231,7 +238,7 @@ export default function SignUpForm() {
           className="w-full"
           variant="outline"
           size="lg"
-          onClick={signUpWithGoogle}
+          onClick={handleGoogleSignIn}
           disabled={isGoogleLoading}
         >
           {isGoogleLoading ? (

@@ -2,9 +2,9 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { RiGoogleFill } from "@remixicon/react";
-import * as Sentry from "@sentry/nextjs";
+
 import { toast } from "sonner";
+import { RiGoogleFill } from "@remixicon/react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -18,8 +18,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 
-import { authClient } from "@/lib/auth/client";
-import { SignInState, signInAction } from "@/actions/auth";
+import { type SignInState, signInAction } from "./actions";
+import { signInWithGoogle } from "../application/sign-in-with-google";
+import { reportAuthError } from "../infrastructure/auth-error-monitoring";
 
 const initialState: SignInState = {
   success: false,
@@ -33,6 +34,7 @@ export default function SignInForm() {
     signInAction,
     initialState
   );
+
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const router = useRouter();
@@ -53,31 +55,36 @@ export default function SignInForm() {
     router.push("/");
   }, [state.success, state.data, router]);
 
-  const signInWithGoogle = async () => {
+  async function handleGoogleSignIn() {
     if (isGoogleLoading) return;
+
     setIsGoogleLoading(true);
 
     try {
-      const { error } = await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/",
-        newUserCallbackURL: "/",
-        errorCallbackURL: "/auth/error",
-      });
+      const { error } = await signInWithGoogle();
 
       if (error) {
+        const errorCode = error.code;
+
         toast.error(error.message);
-        Sentry.captureException(new Error(error.message), {
-          extra: { status: error.status, statusText: error.statusText },
+
+        reportAuthError({
+          context: "google_sign_in",
+          errorCode,
+          error,
         });
       }
-    } catch (err: unknown) {
-      Sentry.captureException(err);
+    } catch (error) {
+      reportAuthError({
+        context: "google_sign_in",
+        error,
+      });
+
       toast.error("Something went wrong on our end. Please try again later.");
     } finally {
       setIsGoogleLoading(false);
     }
-  };
+  }
 
   return (
     <form action={formAction} className="mb-16 space-y-8">
@@ -87,7 +94,7 @@ export default function SignInForm() {
           className="w-full"
           variant="outline"
           size="lg"
-          onClick={signInWithGoogle}
+          onClick={handleGoogleSignIn}
           disabled={isGoogleLoading}
         >
           {isGoogleLoading ? (
@@ -102,12 +109,13 @@ export default function SignInForm() {
             </>
           )}
         </Button>
+
         <div className="relative flex items-center pt-4">
-          <div className="grow border-t-3 border-t-foreground/80"></div>
+          <div className="grow border-t-3 border-t-foreground/80" />
           <span className="mx-4 shrink text-base font-bold text-foreground/80">
             OR
           </span>
-          <div className="grow border-t-3 border-t-foreground/80"></div>
+          <div className="grow border-t-3 border-t-foreground/80" />
         </div>
       </FieldGroup>
       <FieldGroup>
@@ -166,7 +174,7 @@ export default function SignInForm() {
                 <FieldLabel
                   htmlFor="rememberMe"
                   className={`text-base! font-semibold! tracking-tight! ${
-                    !!state.errors?.rememberMe?.length
+                    state.errors?.rememberMe?.length
                       ? "text-error!"
                       : "text-foreground"
                   }`}
