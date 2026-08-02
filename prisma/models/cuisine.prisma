@@ -1,0 +1,13 @@
+model Cuisine {
+  id                        Int           @id @default(autoincrement())
+  publicId                  String        @unique @default(uuid(7)) @map("public_id")
+  name                      String        @unique
+  slug                      String        @unique
+  description               String?
+  icon                      String?
+  isActive                  Boolean       @default(true) @map("is_active")
+  createdAt                 DateTime      @default(now()) @map("created_at")
+  updatedAt                 DateTime      @updatedAt @map("updated_at")
+  
+  @@map("cuisines")
+}
