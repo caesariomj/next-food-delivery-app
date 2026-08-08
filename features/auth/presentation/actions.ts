@@ -3,14 +3,12 @@
 import { isAPIError } from "better-auth/api";
 import { z } from "zod";
 
+import type { FieldError } from "@/types/form";
+
 import { signInWithEmail } from "../application/sign-in-with-email";
 import { signUp } from "../application/sign-up";
 import { reportAuthError } from "../infrastructure/auth-error-monitoring";
 import { signInSchema, signUpSchema } from "../validation/auth-schema";
-
-type FieldError = {
-  message: string;
-};
 
 export type SignInState = {
   success: boolean;
