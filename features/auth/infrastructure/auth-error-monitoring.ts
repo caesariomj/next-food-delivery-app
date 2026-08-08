@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/nextjs";
+import { reportError } from "@/lib/monitoring/sentry";
 
 import { isKnownAuthError } from "../application/auth-error";
 
@@ -8,7 +8,7 @@ type AuthErrorContext =
   | "credentials_sign_in"
   | "sign_up";
 
-type ReportAuthErrorInput = {
+type ReportAuthErrorParams = {
   context: AuthErrorContext;
   errorCode?: string;
   error?: unknown;
@@ -22,20 +22,15 @@ export function reportAuthError({
   error,
   metadata,
   statusCode,
-}: ReportAuthErrorInput) {
+}: ReportAuthErrorParams) {
   const known = isKnownAuthError(errorCode);
 
-  Sentry.captureException(error ?? new Error("Authentication failed"), {
+  reportError({
+    context: `auth.${context}`,
+    error,
+    errorCode,
+    metadata,
+    statusCode,
     level: known ? "error" : "warning",
-    tags: {
-      auth_context: context,
-      error_code: errorCode,
-      status_code: statusCode,
-      unmapped: !known,
-    },
-    extra: {
-      errorCode,
-      metadata,
-    },
   });
 }
