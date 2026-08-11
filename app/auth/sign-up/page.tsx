@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import SignUpForm from "@/app/auth/sign-up/_components/form";
+import SignUpForm from "@/features/auth/presentation/sign-up-form";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "My App";
 
