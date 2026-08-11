@@ -7,7 +7,7 @@ import type { FieldError } from "@/types/form";
 
 import { signInWithEmail } from "../application/sign-in-with-email";
 import { signUp } from "../application/sign-up";
-import { signInSchema, signUpSchema } from "../domain/auth.schema";
+import { signInSchema, signUpSchema } from "../domain/auth-schema";
 import { reportAuthError } from "../infrastructure/auth-error-monitoring";
 
 export type SignInState = {
