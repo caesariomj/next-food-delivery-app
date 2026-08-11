@@ -140,7 +140,7 @@ export default function SignInForm() {
                 autoCorrect="off"
                 placeholder="johndoe@example.com"
                 required
-                hasError={!!state.errors?.email?.length}
+                aria-invalid={state.errors?.email ? "true" : "false"}
               />
               <FieldError errors={state.errors?.email} />
             </Field>
@@ -160,7 +160,7 @@ export default function SignInForm() {
                 placeholder="••••••••"
                 autoComplete="current-password"
                 required
-                hasError={!!state.errors?.password?.length}
+                aria-invalid={state.errors?.password ? "true" : "false"}
               />
               <FieldError errors={state.errors?.password} />
             </Field>
@@ -169,7 +169,7 @@ export default function SignInForm() {
                 <Checkbox
                   id="rememberMe"
                   name="rememberMe"
-                  hasError={!!state.errors?.rememberMe?.length}
+                  aria-invalid={state.errors?.rememberMe ? "true" : "false"}
                 />
                 <FieldLabel
                   htmlFor="rememberMe"

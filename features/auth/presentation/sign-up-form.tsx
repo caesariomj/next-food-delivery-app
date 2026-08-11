@@ -108,7 +108,7 @@ export default function SignUpForm() {
                 placeholder="John Doe"
                 autoComplete="name"
                 required
-                hasError={!!state.errors?.name?.length}
+                aria-invalid={state.errors?.name ? "true" : "false"}
               />
               <FieldError errors={state.errors?.name} />
             </Field>
@@ -131,7 +131,7 @@ export default function SignUpForm() {
                 autoCorrect="off"
                 placeholder="johndoe@example.com"
                 required
-                hasError={!!state.errors?.email?.length}
+                aria-invalid={state.errors?.email ? "true" : "false"}
               />
               <FieldError errors={state.errors?.email} />
             </Field>
@@ -151,7 +151,7 @@ export default function SignUpForm() {
                 placeholder="••••••••"
                 autoComplete="new-password"
                 required
-                hasError={!!state.errors?.password?.length}
+                aria-invalid={state.errors?.password ? "true" : "false"}
               />
               <FieldError errors={state.errors?.password} />
             </Field>
@@ -173,7 +173,7 @@ export default function SignUpForm() {
                 placeholder="••••••••"
                 autoComplete="new-password"
                 required
-                hasError={!!state.errors?.confirmPassword?.length}
+                aria-invalid={state.errors?.confirmPassword ? "true" : "false"}
               />
               <FieldError errors={state.errors?.confirmPassword} />
             </Field>
@@ -183,7 +183,9 @@ export default function SignUpForm() {
                   id="acceptTermsAndConditions"
                   name="acceptTermsAndConditions"
                   required
-                  hasError={!!state.errors?.acceptTermsAndConditions?.length}
+                  aria-invalid={
+                    state.errors?.acceptTermsAndConditions ? "true" : "false"
+                  }
                 />
                 <p className="text-base font-semibold tracking-tight text-foreground">
                   By creating an account you agree to our{" "}
