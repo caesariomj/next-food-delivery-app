@@ -50,6 +50,7 @@ function Input({
       <input
         type={type}
         data-slot="input"
+        aria-invalid={ariaInvalid}
         className={cn(baseInputClassName, className)}
         {...props}
       />
