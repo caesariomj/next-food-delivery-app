@@ -3,6 +3,7 @@ import { Bebas_Neue, Space_Grotesk } from "next/font/google";
 import "@/app/globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils/cn";
 
 const spaceGrotesk = Space_Grotesk({
@@ -41,7 +42,7 @@ export default function RootLayout({
       )}
     >
       <body className="flex min-h-full flex-col">
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
         <Toaster
           position="bottom-right"
           toastOptions={{
