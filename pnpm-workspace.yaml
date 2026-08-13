@@ -1,11 +1,8 @@
 allowBuilds:
-  '@prisma/engines': true
-  '@sentry/cli': set this to true or false
+  "@prisma/engines": true
+  "@sentry/cli": true
   bcrypt: true
   esbuild: true
   prisma: true
   sharp: true
   unrs-resolver: true
-ignoredBuiltDependencies:
-  - sharp
-  - unrs-resolver
