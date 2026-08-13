@@ -24,7 +24,7 @@ function Input({
           type={showPassword ? "text" : "password"}
           data-slot="input"
           aria-invalid={ariaInvalid}
-          className={cn(baseInputClassName, className)}
+          className={cn("peer", baseInputClassName, className)}
           {...props}
         />
         <button
@@ -32,9 +32,9 @@ function Input({
           aria-label={showPassword ? "Hide password" : "Show password"}
           className={cn(
             "absolute top-1/2 right-0 -translate-y-1/2 cursor-pointer border-l-4 p-4 transition-colors duration-200 ease-in-out hover:border-foreground hover:bg-foreground hover:text-background focus:bg-foreground focus:text-background focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-            ariaInvalid
-              ? "border-destructive text-destructive peer-focus:border-destructive"
-              : "border-foreground text-foreground peer-focus:border-primary"
+            ariaInvalid === "true" || ariaInvalid === true
+              ? "border-l-destructive text-destructive peer-focus:border-l-destructive"
+              : "border-l-foreground text-foreground peer-focus:border-l-primary"
           )}
           onClick={() => {
             setShowPassword((prev) => !prev);
