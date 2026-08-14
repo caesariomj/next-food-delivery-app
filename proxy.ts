@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
-import { getUserWithPermissions } from "@/lib/auth/session";
-import type { UserWithPermissions } from "@/types/user";
+import { getCurrentUserWithPermissions } from "@/features/auth/application/get-current-user";
+import type { CurrentUserWithRoleAndPermissions } from "@/features/user/infrastructure/user-type";
 
 async function handleAuthRoute(
-  user: UserWithPermissions | null,
+  user: CurrentUserWithRoleAndPermissions | null,
   request: NextRequest
 ) {
   if (user) return NextResponse.redirect(new URL("/", request.url));
@@ -12,7 +12,7 @@ async function handleAuthRoute(
 }
 
 async function handleProtectedRoute(
-  user: UserWithPermissions | null,
+  user: CurrentUserWithRoleAndPermissions | null,
   request: NextRequest
 ) {
   if (!user)
@@ -22,7 +22,7 @@ async function handleProtectedRoute(
 }
 
 export async function proxy(request: NextRequest) {
-  const user = await getUserWithPermissions();
+  const user = await getCurrentUserWithPermissions();
 
   const isAuthRoute = request.nextUrl.pathname.startsWith("/auth");
 
