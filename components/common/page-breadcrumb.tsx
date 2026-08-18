@@ -20,6 +20,7 @@ export default function PageBreadcrumb() {
     <Breadcrumb>
       <BreadcrumbList>
         {breadcrumbItems.map((item, index) => {
+          const label = item.replaceAll("-", " ");
           const href = "/" + breadcrumbItems.slice(0, index + 1).join("/");
           const isLast = index === breadcrumbItems.length - 1;
 
@@ -27,10 +28,10 @@ export default function PageBreadcrumb() {
             <Fragment key={item}>
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage>{item}</BreadcrumbPage>
+                  <BreadcrumbPage>{label}</BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink href={href} className="underline">
-                    {item}
+                    {label}
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
