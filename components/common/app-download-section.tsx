@@ -76,7 +76,7 @@ export default function AppDownloadSection({
           Track orders live, reorder your favorites in one tap, and get
           exclusive app-only deals. Available on iOS and Android.
         </p>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] place-items-center gap-8">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8">
           {appLinks.map((app) => (
             <Button key={app.name} variant="foreground" size="2xl" asChild>
               <Link
