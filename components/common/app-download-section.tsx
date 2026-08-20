@@ -15,7 +15,7 @@ type AppLink = {
   url: string;
 };
 
-const features = [
+const features: readonly Feature[] = [
   {
     icon: "📍",
     title: "Live Tracking",
@@ -39,9 +39,9 @@ const features = [
     description:
       "Exclusive discounts and early access to new restaurant launches.",
   },
-] satisfies readonly Feature[];
+];
 
-const appLinks = [
+const appLinks: readonly AppLink[] = [
   {
     icon: "🍎",
     text: "Download on the",
@@ -54,7 +54,7 @@ const appLinks = [
     name: "Google Play",
     url: "https://play.google.com/store/apps",
   },
-] satisfies readonly AppLink[];
+];
 
 export default function AppDownloadSection({
   className,
@@ -67,44 +67,44 @@ export default function AppDownloadSection({
       )}
     >
       <div className="w-full space-y-8 lg:w-1/2">
-        <h2 className="font-display text-8xl leading-none font-black tracking-tight md:text-9xl">
+        <h2 className="font-display text-7xl leading-none font-black tracking-tight text-foreground sm:text-9xl">
           GET THE APP.
           <br />
           EAT FASTER.
         </h2>
-        <p className="w-full max-w-xl text-base font-medium tracking-tight text-foreground/80">
+        <p className="w-full max-w-full text-sm font-medium tracking-tight text-foreground/80 sm:max-w-xl sm:text-base">
           Track orders live, reorder your favorites in one tap, and get
           exclusive app-only deals. Available on iOS and Android.
         </p>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] place-items-center gap-8">
           {appLinks.map((app) => (
             <Button key={app.name} variant="foreground" size="2xl" asChild>
               <Link
                 href={app.url}
                 target="_blank"
-                className="flex max-w-full items-center md:max-w-72"
+                className="flex max-w-full items-center sm:max-w-80"
               >
-                <span className="text-4xl">{app.icon}</span>
+                <span className="text-2xl sm:text-4xl">{app.icon}</span>
                 <div className="flex flex-col items-start gap-y-1">
                   <span className="text-xs font-medium">{app.text}</span>
-                  <strong className="text-xl">{app.name}</strong>
+                  <strong className="text-lg sm:text-xl">{app.name}</strong>
                 </div>
               </Link>
             </Button>
           ))}
         </div>
       </div>
-      <ul className="grid w-full grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 lg:w-1/2">
+      <ul className="grid w-full grid-cols-[repeat(auto-fit,minmax(275px,1fr))] gap-8 lg:w-1/2">
         {features.map((feature) => (
           <li
             key={feature.title}
-            className="flex h-60 w-full flex-col justify-center space-y-2 border-4 bg-background p-4 neo-shadow-lg"
+            className="flex h-44 w-full flex-col justify-center space-y-2 border-4 bg-background p-4 neo-shadow-lg sm:h-60"
           >
-            <span className="text-4xl">{feature.icon}</span>
-            <h3 className="mt-4 text-2xl font-bold tracking-tight uppercase">
+            <span className="text-2xl sm:text-4xl">{feature.icon}</span>
+            <h3 className="mt-4 text-xl font-bold tracking-tight uppercase sm:text-2xl">
               {feature.title}
             </h3>
-            <p className="text-base font-medium tracking-tight text-foreground/80">
+            <p className="text-sm font-medium tracking-tight text-foreground/80 sm:text-base">
               {feature.description}
             </p>
           </li>
