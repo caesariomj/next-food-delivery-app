@@ -87,7 +87,7 @@ export default function SignInForm() {
   }
 
   return (
-    <form action={formAction} className="mb-16 space-y-8">
+    <form action={formAction} className="mb-8 space-y-8 sm:mb-16">
       <FieldGroup>
         <Button
           type="button"
@@ -169,6 +169,7 @@ export default function SignInForm() {
                 <Checkbox
                   id="rememberMe"
                   name="rememberMe"
+                  aria-label="Remember Me"
                   aria-invalid={state.errors?.rememberMe ? "true" : "false"}
                 />
                 <FieldLabel

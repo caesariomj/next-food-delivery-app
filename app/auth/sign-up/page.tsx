@@ -16,15 +16,15 @@ export default function SignUp() {
       <h1 className="mb-4 text-6xl leading-none font-black tracking-tight uppercase md:text-7xl">
         Let&apos;s Get You In
       </h1>
-      <p className="mb-16 text-lg font-semibold tracking-tight text-foreground/80">
+      <p className="mb-8 text-lg font-semibold tracking-tight text-foreground/80 sm:mb-16">
         Create your {appName + " "} account — it&apos;s free.
       </p>
       <SignUpForm />
-      <p className="mt-16 text-center text-lg font-medium tracking-tight text-foreground/80">
+      <p className="mt-8 text-center text-lg font-medium tracking-tight text-foreground/80 sm:mt-16">
         Already have an account?{" "}
         <Link
           href="/auth/sign-in"
-          className="font-bold text-secondary underline underline-offset-2 transition-colors duration-200 ease-in-out hover:text-secondary-700 focus:text-secondary-700 focus:outline-none"
+          className="font-bold text-secondary-700 underline underline-offset-2 transition-colors duration-200 ease-in-out hover:text-secondary-900 focus:text-secondary-900 focus:outline-none"
         >
           Sign in
         </Link>

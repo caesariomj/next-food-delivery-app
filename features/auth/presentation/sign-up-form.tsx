@@ -90,7 +90,7 @@ export default function SignUpForm() {
   }
 
   return (
-    <form action={formAction} className="mb-8 space-y-8">
+    <form action={formAction} className="mb-8 space-y-8 sm:mb-16">
       <FieldGroup>
         <FieldSet>
           <FieldGroup>
@@ -183,6 +183,7 @@ export default function SignUpForm() {
                   id="acceptTermsAndConditions"
                   name="acceptTermsAndConditions"
                   required
+                  aria-label="Accept Terms and Conditions"
                   aria-invalid={
                     state.errors?.acceptTermsAndConditions ? "true" : "false"
                   }
