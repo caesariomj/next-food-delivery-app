@@ -1,3 +1,7 @@
-export const ROLES = ["admin", "customer", "merchant"] as const;
+export const ROLES = {
+  ADMIN: "admin",
+  CUSTOMER: "customer",
+  MERCHANT: "merchant",
+} as const;
 
-export type Role = (typeof ROLES)[number];
+export type Role = (typeof ROLES)[keyof typeof ROLES];

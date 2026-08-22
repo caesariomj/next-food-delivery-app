@@ -2,8 +2,10 @@ import { PrismaClient } from "@/generated/prisma/client";
 import { ROLES } from "@/lib/constants/roles";
 
 export default async function seedRoles(prisma: PrismaClient) {
+  const allRoles = Object.values(ROLES);
+
   await Promise.all(
-    ROLES.map((name) => {
+    allRoles.map((name) => {
       return prisma.role.upsert({
         where: { name },
         update: {},
@@ -13,6 +15,6 @@ export default async function seedRoles(prisma: PrismaClient) {
   );
 
   console.log(
-    `✅ [${new Date().toLocaleTimeString()}] Seeder Roles finished — ${ROLES.length} records created.`
+    `✅ [${new Date().toLocaleTimeString()}] Seeder Roles finished — ${allRoles.length} records created.`
   );
 }

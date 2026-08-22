@@ -1,8 +1,8 @@
 import { PrismaClient } from "@/generated/prisma/client";
-import { PERMISSIONS } from "@/lib/constants/permissions";
+import { ROLE_PERMISSIONS } from "@/lib/constants/role-permissions";
 
 export default async function seedRolePermissions(prisma: PrismaClient) {
-  for (const [roleName, permissions] of Object.entries(PERMISSIONS)) {
+  for (const [roleName, permissions] of Object.entries(ROLE_PERMISSIONS)) {
     const role = await prisma.role.findUniqueOrThrow({
       where: { name: roleName },
     });
@@ -14,15 +14,21 @@ export default async function seedRolePermissions(prisma: PrismaClient) {
 
       await prisma.rolePermission.upsert({
         where: {
-          roleId_permissionId: { roleId: role.id, permissionId: permission.id },
+          roleId_permissionId: {
+            roleId: role.id,
+            permissionId: permission.id,
+          },
         },
         update: {},
-        create: { roleId: role.id, permissionId: permission.id },
+        create: {
+          roleId: role.id,
+          permissionId: permission.id,
+        },
       });
     }
   }
 
   console.log(
-    `✅ [${new Date().toLocaleTimeString()}] Seeder Role-Permissions finished — ${Object.keys(PERMISSIONS).length} records created.`
+    `✅ [${new Date().toLocaleTimeString()}] Seeder Role-Permissions finished.`
   );
 }

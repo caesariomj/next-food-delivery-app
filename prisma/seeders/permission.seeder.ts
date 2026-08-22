@@ -2,7 +2,9 @@ import { PrismaClient } from "@/generated/prisma/client";
 import { PERMISSIONS } from "@/lib/constants/permissions";
 
 export default async function seedPermissions(prisma: PrismaClient) {
-  const allPermissions = [...new Set(Object.values(PERMISSIONS).flat())];
+  const allPermissions = Object.values(PERMISSIONS).flatMap((domain) =>
+    Object.values(domain)
+  );
 
   await Promise.all(
     allPermissions.map((name) => {
