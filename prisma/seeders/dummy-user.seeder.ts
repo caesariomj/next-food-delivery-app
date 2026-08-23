@@ -3,25 +3,27 @@ import { hashPassword } from "@/lib/auth/password";
 import { ROLES } from "@/lib/constants/roles";
 
 export default async function seedDummyUser(prisma: PrismaClient) {
+  const allRoles = Object.values(ROLES);
   const hashedPassword = await hashPassword("Password1!");
 
   const roleMap = new Map<string, string>();
-  for (const roleName of ROLES) {
-    const lower = roleName.toLowerCase();
-    const role = await prisma.role.findUnique({
-      where: { name: lower },
+
+  allRoles.map(async (roleName) => {
+    const name = roleName.toLowerCase();
+    const roleRecord = await prisma.role.findUnique({
+      where: { name },
     });
 
-    if (!role) {
+    if (!roleRecord) {
       throw new Error(
-        `Role "${lower}" not found. Seed your roles table before running this seeder.`
+        `Role "${name}" not found. Seed your roles table before running this seeder.`
       );
     }
-    roleMap.set(lower, role.id);
-  }
+    roleMap.set(name, roleRecord.id);
+  });
 
-  for (const role of ROLES) {
-    const name = role.toLowerCase();
+  allRoles.map(async (roleName) => {
+    const name = roleName.toLowerCase();
     const email = `${name}@email.com`;
     const userId = crypto.randomUUID();
 
@@ -63,9 +65,9 @@ export default async function seedDummyUser(prisma: PrismaClient) {
       },
       update: {},
     });
-  }
+  });
 
   console.log(
-    `✅ [${new Date().toLocaleTimeString()}] Seeder Dummy Users finished — ${ROLES.length} records created.`
+    `✅ [${new Date().toLocaleTimeString()}] Seeder Dummy Users finished — ${allRoles.length} records created.`
   );
 }
