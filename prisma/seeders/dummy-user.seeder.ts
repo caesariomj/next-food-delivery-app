@@ -8,7 +8,7 @@ export default async function seedDummyUser(prisma: PrismaClient) {
 
   const roleMap = new Map<string, string>();
 
-  allRoles.map(async (roleName) => {
+  for (const roleName of allRoles) {
     const name = roleName.toLowerCase();
     const roleRecord = await prisma.role.findUnique({
       where: { name },
@@ -20,9 +20,9 @@ export default async function seedDummyUser(prisma: PrismaClient) {
       );
     }
     roleMap.set(name, roleRecord.id);
-  });
+  }
 
-  allRoles.map(async (roleName) => {
+  for (const roleName of allRoles) {
     const name = roleName.toLowerCase();
     const email = `${name}@email.com`;
     const userId = crypto.randomUUID();
@@ -65,7 +65,7 @@ export default async function seedDummyUser(prisma: PrismaClient) {
       },
       update: {},
     });
-  });
+  }
 
   console.log(
     `✅ [${new Date().toLocaleTimeString()}] Seeder Dummy Users finished — ${allRoles.length} records created.`
