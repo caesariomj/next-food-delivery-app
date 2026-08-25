@@ -2,10 +2,10 @@ import { config } from "dotenv";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 import { PrismaClient } from "@/generated/prisma/client";
-import seedRoles from "@/prisma/seeders/role.seeder";
-import seedPermissions from "@/prisma/seeders/permission.seeder";
-import seedRolePermissions from "@/prisma/seeders/role-permission.seeder";
 import seedDummyUser from "@/prisma/seeders/dummy-user.seeder";
+import seedPermissions from "@/prisma/seeders/permission.seeder";
+import seedRoles from "@/prisma/seeders/role.seeder";
+import seedRolePermissions from "@/prisma/seeders/role-permission.seeder";
 
 const envFile =
   process.env.NODE_ENV === "production"
@@ -19,8 +19,6 @@ const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log(process.env.NODE_ENV);
-
   await seedRoles(prisma);
   await seedPermissions(prisma);
   await seedRolePermissions(prisma);
