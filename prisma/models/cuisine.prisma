@@ -8,6 +8,9 @@ model Cuisine {
   isActive                  Boolean       @default(true) @map("is_active")
   createdAt                 DateTime      @default(now()) @map("created_at")
   updatedAt                 DateTime      @updatedAt @map("updated_at")
-  
+
+  restaurants               RestaurantCuisine[]
+  restaurantApplications    RestaurantApplicationCuisine[]
+
   @@map("cuisines")
 }

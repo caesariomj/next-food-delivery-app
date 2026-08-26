@@ -1,0 +1,116 @@
+enum RestaurantStatus {
+  ONBOARDING    @map("onboarding")
+  ACTIVE        @map("active")
+  SUSPENDED     @map("suspended")
+  CLOSED        @map("closed")
+
+  @@map("restaurant_status")
+}
+
+model Restaurant {
+  id                        Int                           @id @default(autoincrement())
+  publicId                  String                        @unique @default(uuid(7)) @map("public_id")
+  name                      String
+  slug                      String                        @unique
+  description               String?
+  logoUrl                   String?                       @map("logo_url")
+  coverImageUrl             String?                       @map("cover_image_url")
+  phone                     String
+  email                     String?
+  address                   String
+  latitude                  Decimal?                      @db.Decimal(9, 6)
+  longitude                 Decimal?                      @db.Decimal(9, 6)
+  status                    RestaurantStatus              @default(ONBOARDING)
+  createdAt                 DateTime                      @default(now()) @map("created_at")
+  updatedAt                 DateTime                      @updatedAt @map("updated_at")
+
+  owners                    UserRestaurant[]
+  cuisines                  RestaurantCuisine[]
+  operatingHours            RestaurantOperatingHour[]
+
+  @@map("restaurants")
+}
+
+model RestaurantCuisine {
+  restaurantId    Int           @map("restaurant_id")
+  cuisineId       Int           @map("cuisine_id")
+
+  restaurant      Restaurant    @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  cuisine         Cuisine       @relation(fields: [cuisineId], references: [id], onDelete: Cascade)
+
+  @@id([restaurantId, cuisineId])
+  @@map("restaurant_cuisines")
+}
+
+enum DayOfWeek {
+  MONDAY      @map("monday")
+  TUESDAY     @map("tuesday")
+  WEDNESDAY   @map("wednesday")
+  THURSDAY    @map("thursday")
+  FRIDAY      @map("friday")
+  SATURDAY    @map("saturday")
+  SUNDAY      @map("sunday")
+
+  @@map("day_of_week")
+}
+
+model RestaurantOperatingHour {
+  id              Int           @id @default(autoincrement())
+  restaurantId    Int           @map("restaurant_id")
+  dayOfWeek       DayOfWeek     @map("day_of_week")
+  openTime        DateTime?     @db.Time @map("open_time")
+  closeTime       DateTime?     @db.Time @map("close_time")
+
+  restaurant      Restaurant    @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([restaurantId, dayOfWeek])
+  @@map("restaurant_operating_hours")
+}
+
+enum RestaurantApplicationStatus {
+  DRAFT               @map("draft")
+  SUBMITTED           @map("submitted")
+  UNDER_REVIEW        @map("under_review")
+  REVISION_REQUIRED   @map("revision_required")
+  RESUBMITTED         @map("resubmitted")
+  APPROVED            @map("approved")
+  REJECTED            @map("rejected")
+
+  @@map("restaurant_application_status")
+}
+
+model RestaurantApplication {
+  id                                Int                               @id @default(autoincrement())
+  publicId                          String                            @unique @default(uuid(7)) @map("public_id")
+  applicantId                       String                            @map("applicant_id")
+  status                            RestaurantApplicationStatus
+  businessName                      String                            @map("business_name")
+  businessPhone                     String                            @map("business_phone")
+  businessEmail                     String?                           @map("business_email")
+  businessImage                     String?                           @map("business_image")
+  address                           String
+  businessLicense                   String?                           @map("business_license")
+  rejectionReason                   String?                           @map("rejection_reason")
+  revisionNotes                     String?                           @map("revision_notes")
+  reviewedBy                        String?                           @map("reviewed_by")
+  reviewedAt                        DateTime?                         @map("reviewed_at")
+  submittedAt                       DateTime?                         @map("submitted_at")
+  createdAt                         DateTime                          @default(now()) @map("created_at")
+  updatedAt                         DateTime                          @updatedAt @map("updated_at")
+
+  user                              User                              @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  restaurantApplicationCuisines     RestaurantApplicationCuisine[]
+
+  @@map("restaurant_applications")
+}
+
+model RestaurantApplicationCuisine {
+  restaurantApplicationId     Int                       @map("restaurant_application_id")
+  cuisineId                   Int                       @map("cuisine_id")
+
+  restaurantApplication       RestaurantApplication     @relation(fields: [restaurantApplicationId], references: [id], onDelete: Cascade)
+  cuisine                     Cuisine                   @relation(fields: [cuisineId], references: [id], onDelete: Cascade)
+
+  @@id([restaurantApplicationId, cuisineId])
+  @@map("restaurant_application_cuisines")
+}

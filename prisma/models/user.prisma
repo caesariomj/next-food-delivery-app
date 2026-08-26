@@ -1,18 +1,20 @@
 model User {
-  id                          String        @id
-  email                       String        @unique
-  emailVerified               Boolean       @default(false) @map("email_verified")
+  id                          String                      @id
+  email                       String                      @unique
+  emailVerified               Boolean                     @default(false) @map("email_verified")
   name                        String
-  phone                       String?       @unique
+  phone                       String?                     @unique
   image                       String?
-  createdAt                   DateTime      @default(now()) @map("created_at")
-  updatedAt                   DateTime      @updatedAt @map("updated_at")
-  deletedAt                   DateTime?     @map("deleted_at")
+  createdAt                   DateTime                    @default(now()) @map("created_at")
+  updatedAt                   DateTime                    @updatedAt @map("updated_at")
+  deletedAt                   DateTime?                   @map("deleted_at")
 
   sessions                    Session[]
   accounts                    Account[]
-  roles                       UserRole[]    @relation("UserRoles")
-  assigned                    UserRole[]    @relation("AssignedRoles")
+  roles                       UserRole[]                  @relation("UserRoles")
+  assigned                    UserRole[]                  @relation("AssignedRoles")
+  restaurantApplications      RestaurantApplication[]
+  restaurants                 UserRestaurant[]
 
   @@index([createdAt])
   @@map("users")
@@ -30,4 +32,15 @@ model UserRole {
 
   @@id([userId, roleId])
   @@map("user_roles")
+}
+
+model UserRestaurant {
+  userId                      String        @map("user_id")
+  restaurantId                Int           @map("restaurant_id")
+
+  user                        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  restaurant                  Restaurant    @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@id([userId, restaurantId])
+  @@map("user_restaurants")
 }
