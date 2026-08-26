@@ -13,7 +13,8 @@ model User {
   accounts                    Account[]
   roles                       UserRole[]                  @relation("UserRoles")
   assigned                    UserRole[]                  @relation("AssignedRoles")
-  restaurantApplications      RestaurantApplication[]
+  restaurantApplications      RestaurantApplication[]     @relation("ApplicantApplications")
+  reviewedApplications        RestaurantApplication[]     @relation("ReviewerApplications")
   restaurants                 UserRestaurant[]
 
   @@index([createdAt])

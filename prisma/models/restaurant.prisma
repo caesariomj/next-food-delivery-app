@@ -88,17 +88,22 @@ model RestaurantApplication {
   businessPhone                     String                            @map("business_phone")
   businessEmail                     String?                           @map("business_email")
   businessImage                     String?                           @map("business_image")
+  businessCoverImage                String?                           @map("business_cover_image")
+  businessDescription               String?                           @map("business_description")
   address                           String
+  latitude                          Decimal?                          @db.Decimal(9, 6)
+  longitude                         Decimal?                          @db.Decimal(9, 6)
   businessLicense                   String?                           @map("business_license")
   rejectionReason                   String?                           @map("rejection_reason")
   revisionNotes                     String?                           @map("revision_notes")
-  reviewedBy                        String?                           @map("reviewed_by")
+  reviewedById                      String?                           @map("reviewed_by_id")
   reviewedAt                        DateTime?                         @map("reviewed_at")
   submittedAt                       DateTime?                         @map("submitted_at")
   createdAt                         DateTime                          @default(now()) @map("created_at")
   updatedAt                         DateTime                          @updatedAt @map("updated_at")
 
-  user                              User                              @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  applicant                         User                              @relation("ApplicantApplications", fields: [applicantId], references: [id], onDelete: Cascade)
+  reviewer                          User?                             @relation("ReviewerApplications", fields: [reviewedById], references: [id], onDelete: SetNull)
   restaurantApplicationCuisines     RestaurantApplicationCuisine[]
 
   @@map("restaurant_applications")
