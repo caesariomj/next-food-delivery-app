@@ -2,10 +2,14 @@ import { config } from "dotenv";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 import { PrismaClient } from "@/generated/prisma/client";
-import seedDummyUser from "@/prisma/seeders/dummy-user.seeder";
-import seedPermissions from "@/prisma/seeders/permission.seeder";
-import seedRoles from "@/prisma/seeders/role.seeder";
-import seedRolePermissions from "@/prisma/seeders/role-permission.seeder";
+
+import seedDummyCuisine from "./seeders/dummy-cuisine.seeder";
+import seedDummyRestaurant from "./seeders/dummy-restaurant.seeder";
+import seedDummyRestaurantApplication from "./seeders/dummy-restaurant-application.seeder";
+import seedDummyUser from "./seeders/dummy-user.seeder";
+import seedPermissions from "./seeders/permission.seeder";
+import seedRoles from "./seeders/role.seeder";
+import seedRolePermissions from "./seeders/role-permission.seeder";
 
 const envFile =
   process.env.NODE_ENV === "production"
@@ -25,6 +29,9 @@ async function main() {
 
   if (process.env.NODE_ENV === "development") {
     await seedDummyUser(prisma);
+    await seedDummyCuisine(prisma);
+    await seedDummyRestaurant(prisma);
+    await seedDummyRestaurantApplication(prisma);
   }
 }
 

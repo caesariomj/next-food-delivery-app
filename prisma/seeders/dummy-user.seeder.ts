@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/generated/prisma/client";
+import type { PrismaClient } from "@/generated/prisma/client";
 import { hashPassword } from "@/lib/auth/password";
 import { ROLES } from "@/lib/constants/roles";
 

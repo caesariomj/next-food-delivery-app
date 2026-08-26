@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/generated/prisma/client";
+import type { PrismaClient } from "@/generated/prisma/client";
 import { ROLES } from "@/lib/constants/roles";
 
 export default async function seedRoles(prisma: PrismaClient) {

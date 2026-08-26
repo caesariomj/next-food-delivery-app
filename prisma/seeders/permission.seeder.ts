@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/generated/prisma/client";
+import type { PrismaClient } from "@/generated/prisma/client";
 import { PERMISSIONS } from "@/lib/constants/permissions";
 
 export default async function seedPermissions(prisma: PrismaClient) {
