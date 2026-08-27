@@ -4,7 +4,18 @@ import { withSentryConfig } from "@sentry/nextjs";
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.*.*"],
   images: {
-    remotePatterns: [new URL("https://lh3.googleusercontent.com/**")],
+    remotePatterns: [
+      new URL("https://lh3.googleusercontent.com/**"),
+      ...(process.env.NODE_ENV === "development"
+        ? [
+            {
+              protocol: "https" as const,
+              hostname: "picsum.photos",
+              pathname: "/**",
+            },
+          ]
+        : []),
+    ],
     qualities: [25, 50, 75, 100],
   },
 };
