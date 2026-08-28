@@ -6,3 +6,7 @@ allowBuilds:
   prisma: true
   sharp: true
   unrs-resolver: true
+
+overrides:
+  "@radix-ui/react-slot": "1.2.5"
+  "@radix-ui/react-primitive": "2.1.5"
