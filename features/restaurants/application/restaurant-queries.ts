@@ -1,3 +1,5 @@
+import { Prisma } from "@/generated/prisma/client";
+
 import {
   RESTAURANT_HERO_LIMIT,
   RESTAURANT_LANDING_TOP_RATED_SECTION_LIMIT,
@@ -10,11 +12,35 @@ import {
   landingPageTopRatedRestaurantsSelect,
 } from "../infrastructure/restaurant-type";
 
-export async function getLandingPageHeroRestaurants(): Promise<
-  LandingPageHeroRestaurant[]
-> {
+export async function getLandingPageHeroRestaurants(
+  latitude?: string,
+  longitude?: string,
+  cuisineSlug?: string
+): Promise<LandingPageHeroRestaurant[]> {
+  const orConditions: Prisma.RestaurantWhereInput[] = [];
+
+  if (latitude && longitude) {
+    orConditions.push({
+      latitude: parseFloat(latitude),
+      longitude: parseFloat(longitude),
+    });
+  }
+
+  if (cuisineSlug) {
+    orConditions.push({
+      cuisines: {
+        some: {
+          cuisine: {
+            slug: cuisineSlug,
+          },
+        },
+      },
+    });
+  }
+
   return await findRestaurants({
     select: landingPageHeroRestaurantSelect,
+    where: orConditions.length > 0 ? { OR: orConditions } : undefined,
     take: RESTAURANT_HERO_LIMIT,
   });
 }
