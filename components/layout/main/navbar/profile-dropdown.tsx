@@ -1,11 +1,4 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-
-import { RiLogoutBoxLine } from "@remixicon/react";
-import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -16,8 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "@/features/auth/application/sign-out";
-import { reportAuthError } from "@/features/auth/infrastructure/auth-error-monitoring";
+import SignOutButton from "@/features/auth/presentation/sign-out-button";
 import {
   extractUserPermissions,
   hasAllPermissions,
@@ -36,42 +28,7 @@ export default function ProfileDropdown({
   user,
   className,
 }: ProfileDropdownProps) {
-  const [isSignOutLoading, setIsSignOutLoading] = useState(false);
-  const router = useRouter();
-
   const userPermissions = extractUserPermissions(user);
-
-  async function handleSignOut(): Promise<void> {
-    if (isSignOutLoading) return;
-
-    setIsSignOutLoading(true);
-
-    try {
-      const { error } = await signOut();
-
-      if (error) {
-        reportAuthError({
-          context: "sign_out",
-          errorCode: error.code,
-          error,
-        });
-
-        toast.error(error.message ?? "Failed to sign out.");
-        return;
-      }
-
-      router.replace("/");
-    } catch (error) {
-      reportAuthError({
-        context: "sign_out",
-        error,
-      });
-
-      toast.error("Something went wrong on our end. Please try again later.");
-    } finally {
-      setIsSignOutLoading(false);
-    }
-  }
 
   return (
     <DropdownMenu>
@@ -96,37 +53,33 @@ export default function ProfileDropdown({
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="mt-1 w-72">
-        {MAIN_PROFILE_DROPDOWN_MENU_ITEM_LINKS.filter(
-          (link) =>
-            !link.permissions ||
-            hasAllPermissions(userPermissions, link.permissions)
-        ).map((link) => {
-          const Icon = link.icon;
+        <DropdownMenuGroup>
+          {MAIN_PROFILE_DROPDOWN_MENU_ITEM_LINKS.filter(
+            (link) =>
+              !link.permissions ||
+              hasAllPermissions(userPermissions, link.permissions)
+          ).map((link) => {
+            const Icon = link.icon;
 
-          return (
-            <div key={link.href}>
-              {link.separatorBefore && <DropdownMenuSeparator />}
-              <DropdownMenuGroup>
+            return (
+              <div key={link.href}>
+                {link.separatorBefore && <DropdownMenuSeparator />}
                 <DropdownMenuItem asChild>
                   <Link href={link.href}>
                     <Icon className="size-5" />
                     {link.label}
                   </Link>
                 </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </div>
-          );
-        })}
+              </div>
+            );
+          })}
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          variant="destructive"
-          onClick={handleSignOut}
-          className="font-semibold"
-          disabled={isSignOutLoading}
-        >
-          <RiLogoutBoxLine />
-          {isSignOutLoading ? "Signing Out..." : "Sign Out"}
-        </DropdownMenuItem>
+        <DropdownMenuGroup>
+          <DropdownMenuItem variant="destructive" asChild>
+            <SignOutButton className="w-full" />
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
