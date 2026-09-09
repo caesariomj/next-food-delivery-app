@@ -10,32 +10,13 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import NotificationDropdown from "@/components/common/navigation/notification-dropdown";
 import type { CurrentUserWithRoleAndPermissions } from "@/features/user/infrastructure/user-type";
-import type { NavLink } from "@/types/navigation";
+import { MAIN_NAVBAR_LINKS } from "@/lib/constants/navigation";
 
 import CartSheet from "./cart-sheet";
 import MenuSheet from "./menu-sheet";
 import ProfileDropdown from "./profile-dropdown";
-import NotificationDropdown from "../../../common/navigation/notification-dropdown";
-
-const links: readonly NavLink[] = [
-  {
-    title: "Cuisines",
-    href: "/cuisines",
-  },
-  {
-    title: "Restaurants",
-    href: "/restaurants",
-  },
-  {
-    title: "Deals",
-    href: "/deals",
-  },
-  {
-    title: "Partnership",
-    href: "/partnership",
-  },
-];
 
 type NavbarProps = {
   user: CurrentUserWithRoleAndPermissions | null;
@@ -57,7 +38,7 @@ export default function Navbar({ user }: NavbarProps) {
     <NavigationMenu className="sticky top-0 left-0 z-2 flex h-12 min-w-full items-center justify-between border-b-4 border-b-foreground bg-primary px-4 sm:h-16 lg:px-16">
       <Logo />
       <NavigationMenuList className="hidden h-12 gap-x-2 sm:h-16 lg:flex">
-        {links.map((link) => (
+        {MAIN_NAVBAR_LINKS.map((link) => (
           <NavigationMenuItem key={link.href}>
             <NavigationMenuLink
               asChild
@@ -111,7 +92,7 @@ export default function Navbar({ user }: NavbarProps) {
           )}
         </div>
         <MenuSheet
-          links={links}
+          links={MAIN_NAVBAR_LINKS}
           user={user}
           className="block h-full px-3.5 sm:hidden"
         />

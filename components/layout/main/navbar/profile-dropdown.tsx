@@ -4,14 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import {
-  RiCustomerService2Fill,
-  RiDashboard2Fill,
-  RiLogoutBoxLine,
-  RiTakeawayFill,
-  RiUser3Fill,
-} from "@remixicon/react";
-import * as Sentry from "@sentry/nextjs";
+import { RiLogoutBoxLine } from "@remixicon/react";
 import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -23,47 +16,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { signOut } from "@/features/auth/application/sign-out";
+import { reportAuthError } from "@/features/auth/infrastructure/auth-error-monitoring";
 import {
   extractUserPermissions,
   hasAllPermissions,
 } from "@/features/permission/application/permission-utils";
 import type { CurrentUserWithRoleAndPermissions } from "@/features/user/infrastructure/user-type";
-import { authClient } from "@/lib/auth/client";
+import { MAIN_PROFILE_DROPDOWN_MENU_ITEM_LINKS } from "@/lib/constants/navigation";
 import { cn } from "@/lib/utils/cn";
 import { getFullNameInitials, toTitleCase } from "@/lib/utils/string";
-import type { LinkItem } from "@/types/link";
-
-type ProfileDropdownMenuItemLink = LinkItem & {
-  permissions?: string[];
-  separatorBefore?: boolean;
-};
-
-const profileDropdownMenuItemLinks: readonly ProfileDropdownMenuItemLink[] = [
-  {
-    label: "Account",
-    href: "/account",
-    icon: <RiUser3Fill className="size-5" />,
-  },
-  {
-    label: "My Orders",
-    href: "/orders",
-    icon: <RiTakeawayFill className="size-5" />,
-    // TODO: Implement user order permissions to conditionally render menu item here
-  },
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: <RiDashboard2Fill className="size-5" />,
-    permissions: ["dashboard.access"],
-    separatorBefore: true,
-  },
-  {
-    label: "Help & Support",
-    href: "/help-center",
-    icon: <RiCustomerService2Fill className="size-5" />,
-    separatorBefore: true,
-  },
-];
 
 type ProfileDropdownProps = {
   user: CurrentUserWithRoleAndPermissions;
@@ -79,34 +41,37 @@ export default function ProfileDropdown({
 
   const userPermissions = extractUserPermissions(user);
 
-  const handleSignOut = async () => {
+  async function handleSignOut(): Promise<void> {
     if (isSignOutLoading) return;
+
     setIsSignOutLoading(true);
 
     try {
-      const { error } = await authClient.signOut({
-        fetchOptions: {
-          onSuccess: () => {
-            router.replace("/");
-          },
-        },
-      });
+      const { error } = await signOut();
 
       if (error) {
-        toast.error(error.message ?? "Failed to sign out");
-        Sentry.captureException(new Error(error.message ?? "Sign out failed"), {
-          extra: { status: error.status, statusText: error.statusText },
+        reportAuthError({
+          context: "sign_out",
+          errorCode: error.code,
+          error,
         });
-        router.replace("/");
+
+        toast.error(error.message ?? "Failed to sign out.");
+        return;
       }
-    } catch (unexpected) {
-      Sentry.captureException(unexpected);
-      toast.error("Something went wrong while signing out");
+
       router.replace("/");
+    } catch (error) {
+      reportAuthError({
+        context: "sign_out",
+        error,
+      });
+
+      toast.error("Something went wrong on our end. Please try again later.");
     } finally {
       setIsSignOutLoading(false);
     }
-  };
+  }
 
   return (
     <DropdownMenu>
@@ -131,25 +96,27 @@ export default function ProfileDropdown({
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="mt-1 w-72">
-        {profileDropdownMenuItemLinks
-          .filter(
-            (link) =>
-              !link.permissions ||
-              hasAllPermissions(userPermissions, link.permissions)
-          )
-          .map((link) => (
+        {MAIN_PROFILE_DROPDOWN_MENU_ITEM_LINKS.filter(
+          (link) =>
+            !link.permissions ||
+            hasAllPermissions(userPermissions, link.permissions)
+        ).map((link) => {
+          const Icon = link.icon;
+
+          return (
             <div key={link.href}>
               {link.separatorBefore && <DropdownMenuSeparator />}
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
                   <Link href={link.href}>
-                    {link.icon}
+                    <Icon className="size-5" />
                     {link.label}
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </div>
-          ))}
+          );
+        })}
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
@@ -158,7 +125,7 @@ export default function ProfileDropdown({
           disabled={isSignOutLoading}
         >
           <RiLogoutBoxLine />
-          Sign Out
+          {isSignOutLoading ? "Signing Out..." : "Sign Out"}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
