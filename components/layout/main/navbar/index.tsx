@@ -15,8 +15,8 @@ import type { NavLink } from "@/types/navigation";
 
 import CartSheet from "./cart-sheet";
 import MenuSheet from "./menu-sheet";
-import NotificationDropdown from "./notification-dropdown";
 import ProfileDropdown from "./profile-dropdown";
+import NotificationDropdown from "../../../common/navigation/notification-dropdown";
 
 const links: readonly NavLink[] = [
   {

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import AppDownloadSection from "@/components/common/app-download-section";
+import AppDownloadSection from "@/components/common/sections/app-download-section";
 import Footer from "@/components/layout/main/footer";
 import Navbar from "@/components/layout/main/navbar";
 import { getCurrentUserWithPermissions } from "@/features/auth/application/get-current-user";
@@ -14,7 +14,7 @@ import PromoSection from "@/features/landing/presentation/promo/section";
 import TopRatedRestaurantsSection from "@/features/landing/presentation/top-rated-restaurants/section";
 
 export const metadata: Metadata = {
-  title: "Hungry? We Fixed That.",
+  title: `Hungry? We Fixed That. ― ${process.env.NEXT_PUBLIC_APP_NAME}`,
   description:
     "Raw, fast restaurant search. Pick a cuisine, drop your address, eat. That's it.",
 };
