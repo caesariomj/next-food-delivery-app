@@ -2,7 +2,7 @@ import type { Permission } from "@/generated/prisma/client";
 import type { NavGroup } from "@/types/navigation";
 
 export function filterNavGroupsByPermissions(
-  groups: NavGroup[],
+  groups: readonly NavGroup[],
   userPermissions: Permission[]
 ): NavGroup[] {
   const permissionNames = new Set(userPermissions.map((p) => p.name));
