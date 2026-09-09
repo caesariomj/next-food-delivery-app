@@ -2,6 +2,7 @@ import {
   RiCustomerService2Fill,
   RiDashboard2Fill,
   RiInstagramFill,
+  RiStore3Fill,
   RiTakeawayFill,
   RiTiktokFill,
   RiTwitterXFill,
@@ -231,3 +232,25 @@ export const DASHBOARD_SIDEBAR_NAV_GROUPS: readonly NavGroup[] = [
     ],
   },
 ];
+
+export const DASHBOARD_PROFILE_DROPDOWN_MENU_ITEM_LINKS: readonly ProfileDropdownMenuItemLink[] =
+  [
+    {
+      label: "Restaurant Profile",
+      href: "/dashboard/restaurants",
+      icon: RiStore3Fill,
+      // TODO: Implement merchant restaurant profile to conditionally render menu item here
+    },
+    {
+      label: "My Account",
+      href: "/dashboard/account",
+      icon: RiUser3Fill,
+      // TODO: Implement admin and merchant account setting to conditionally render menu item here
+    },
+    {
+      label: "Help & Support",
+      href: "/dashboard/help-center",
+      icon: RiCustomerService2Fill,
+      separatorBefore: true,
+    },
+  ];
