@@ -6,7 +6,8 @@ type AuthErrorContext =
   | "oauth_callback"
   | "google_sign_in"
   | "credentials_sign_in"
-  | "sign_up";
+  | "sign_up"
+  | "sign_out";
 
 type ReportAuthErrorParams = {
   context: AuthErrorContext;

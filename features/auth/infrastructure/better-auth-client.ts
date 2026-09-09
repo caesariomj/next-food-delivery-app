@@ -8,3 +8,7 @@ export function signInWithGoogleProvider() {
     errorCallbackURL: "/auth/error",
   });
 }
+
+export function signOut() {
+  return authClient.signOut();
+}
