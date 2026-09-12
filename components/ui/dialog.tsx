@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
+
 import { Dialog as DialogPrimitive } from "radix-ui";
+import { RiCloseLine } from "@remixicon/react";
 
 import { cn } from "@/lib/utils/cn";
-import { Button } from "@/components/ui/button";
-import { RiCloseLine } from "@remixicon/react";
 
 function Dialog({
   ...props
@@ -69,14 +69,10 @@ function DialogContent({
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close data-slot="dialog-close" asChild>
-            <Button
-              variant="ghost"
-              className="absolute top-5 right-5 bg-background neo-shadow-sm"
-              size="icon-sm"
-            >
-              <RiCloseLine />
+            <button className="group absolute top-5 right-5 cursor-pointer border-2 border-background/80 bg-foreground neo-shadow-sm transition-colors duration-200 ease-in-out hover:border-background">
+              <RiCloseLine className="size-6 fill-background/80 transition-colors duration-200 ease-in-out group-hover:fill-background" />
               <span className="sr-only">Close</span>
-            </Button>
+            </button>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>
@@ -88,7 +84,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-2 p-6", className)}
+      className={cn("flex flex-col gap-2 bg-foreground p-6", className)}
       {...props}
     />
   );
@@ -106,7 +102,7 @@ function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        "flex flex-col-reverse border-t-4 border-t-foreground sm:flex-row sm:justify-between",
+        "flex flex-col-reverse divide-x-0 divide-y-4 divide-foreground border-t-4 border-t-foreground sm:flex-row sm:justify-between sm:divide-x-4 sm:divide-y-0",
         className
       )}
       {...props}
@@ -114,7 +110,7 @@ function DialogFooter({
       {children}
       {showCloseButton && (
         <DialogPrimitive.Close asChild>
-          <Button variant="outline">Close</Button>
+          <button>Close</button>
         </DialogPrimitive.Close>
       )}
     </div>
@@ -129,7 +125,7 @@ function DialogTitle({
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={cn(
-        "font-heading text-5xl leading-none font-semibold tracking-wide uppercase",
+        "font-heading text-5xl leading-none font-semibold tracking-wider text-primary uppercase",
         className
       )}
       {...props}
@@ -145,7 +141,7 @@ function DialogDescription({
     <DialogPrimitive.Description
       data-slot="dialog-description"
       className={cn(
-        "mt-0.5 text-base leading-relaxed text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
+        "mt-0.5 text-sm leading-relaxed text-primary-600 *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
         className
       )}
       {...props}
