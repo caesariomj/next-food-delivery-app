@@ -40,7 +40,7 @@ export default function Logo({ variant = "light", className }: LogoProps) {
   const { base, highlight } = variantClasses[variant];
 
   const baseClass = cn(
-    "group inline-flex items-center gap-x-2 font-display text-2xl tracking-wider focus:outline-none md:text-4xl",
+    "group inline-flex items-center gap-x-2 font-display text-2xl tracking-wider focus:outline-none sm:text-4xl",
     base
   );
   const highlightClass = cn(
