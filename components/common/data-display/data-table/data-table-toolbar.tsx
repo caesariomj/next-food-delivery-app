@@ -1,0 +1,99 @@
+"use client";
+
+import { RiArrowDownSLine, RiSearchLine } from "@remixicon/react";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SORT_OPTIONS } from "@/lib/constants/pagination";
+import { cn } from "@/lib/utils/cn";
+import { isSortValue } from "@/lib/utils/pagination";
+import type { SortOptionValue } from "@/types/pagination";
+
+type DataTableToolbarProps = {
+  entityName: string;
+  entityNamePlural: string;
+  showedCount: number;
+  totalCount: number;
+  sortBy: SortOptionValue;
+  onSearchChangeAction: (value: string) => void;
+  onSortChangeAction: (value: SortOptionValue) => void;
+  className?: string;
+};
+
+export default function DataTableToolbar({
+  entityName,
+  entityNamePlural,
+  totalCount,
+  showedCount,
+  sortBy,
+  onSearchChangeAction,
+  onSortChangeAction,
+  className,
+}: DataTableToolbarProps) {
+  return (
+    <div
+      className={cn(
+        "flex w-full flex-col divide-x-0 divide-y-4 divide-foreground border-4 border-foreground bg-background neo-shadow lg:flex-row lg:divide-x-4 lg:divide-y-0",
+        className
+      )}
+    >
+      <div className="flex w-full items-center divide-x-4 divide-foreground lg:w-4/6">
+        <input
+          type="text"
+          name={`${entityName}-name`}
+          id={`${entityName}-name`}
+          placeholder={`Type a ${entityName} name...`}
+          className="w-full p-4 pl-8 focus:outline-none"
+          onChange={(e) => onSearchChangeAction(e.target.value)}
+        />
+        <button className="inline-flex cursor-pointer items-center gap-2 p-4 font-medium tracking-tight transition-colors duration-200 ease-in-out hover:bg-primary">
+          <RiSearchLine className="size-6" />
+          Search
+        </button>
+      </div>
+      <div className="w-full lg:w-1/6">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="flex w-full cursor-pointer items-center justify-center gap-2 p-4 text-base font-semibold tracking-tight text-primary-800 transition-colors duration-200 ease-in-out hover:bg-primary focus:outline-none">
+              Sort By:{" "}
+              {SORT_OPTIONS.find((option) => option.value === sortBy)?.label}
+              <RiArrowDownSLine className="size-5" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-63.5" align="center">
+            <DropdownMenuGroup>
+              <DropdownMenuRadioGroup
+                value={sortBy}
+                onValueChange={(value) => {
+                  if (isSortValue(value)) {
+                    onSortChangeAction(value);
+                  }
+                }}
+              >
+                {SORT_OPTIONS.map((option) => (
+                  <DropdownMenuRadioItem
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="w-full p-4 pr-8 text-center lg:w-1/6">
+        <span className="text-base font-semibold tracking-tight text-nowrap text-primary-800">
+          Showing {showedCount} of {totalCount} {entityNamePlural}
+        </span>
+      </div>
+    </div>
+  );
+}
