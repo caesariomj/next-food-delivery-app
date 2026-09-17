@@ -49,7 +49,7 @@ export async function getCuisineByName(name: string): Promise<Cuisine | null> {
   });
 }
 
-export async function getTotalCuisines(): Promise<CuisineStatsResult> {
+export async function getCuisineStats(): Promise<CuisineStatsResult> {
   return await countCuisines();
 }
 
