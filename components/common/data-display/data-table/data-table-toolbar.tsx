@@ -19,7 +19,7 @@ type DataTableToolbarProps = {
   entityNamePlural: string;
   showedCount: number;
   totalCount: number;
-  sortOptions: SortOption[];
+  sortOptions: readonly SortOption[];
   sortBy: SortOptionValue;
   onSearchChangeAction: (value: string) => void;
   onSortChangeAction: (value: SortOptionValue) => void;
@@ -29,8 +29,8 @@ type DataTableToolbarProps = {
 export default function DataTableToolbar({
   entityName,
   entityNamePlural,
-  totalCount,
   showedCount,
+  totalCount,
   sortOptions,
   sortBy,
   onSearchChangeAction,
@@ -91,7 +91,8 @@ export default function DataTableToolbar({
         </DropdownMenu>
         <div className="p-4 text-center">
           <span className="text-base font-semibold tracking-tight text-nowrap text-primary-800">
-            Showing {showedCount} of {totalCount} {entityNamePlural}
+            Showing {Math.min(showedCount, totalCount)} of {totalCount}{" "}
+            {entityNamePlural}
           </span>
         </div>
       </div>

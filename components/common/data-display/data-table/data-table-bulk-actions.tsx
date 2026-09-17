@@ -9,8 +9,8 @@ type DataTableBulkActionsProps = {
 };
 
 export default function DataTableBulkActions({
-  children,
   selectedCount,
+  children,
   className,
 }: DataTableBulkActionsProps) {
   return (

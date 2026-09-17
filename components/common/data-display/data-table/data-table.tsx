@@ -30,9 +30,10 @@ type DataTableProps = {
   entityNamePlural: string;
   isEmpty: boolean;
   totalCount: number;
+  showedCount: number;
   selectedCount: number;
   columnCount: number;
-  sortOptions: SortOption[];
+  sortOptions: readonly SortOption[];
   bulkActions: ReactNode;
   header: ReactNode;
   children: ReactNode;
@@ -44,6 +45,7 @@ export default function DataTable({
   entityNamePlural,
   isEmpty,
   totalCount,
+  showedCount,
   selectedCount,
   columnCount,
   sortOptions,
@@ -91,7 +93,7 @@ export default function DataTable({
       <DataTableToolbar
         entityName={entityName}
         entityNamePlural={entityNamePlural}
-        showedCount={Number(perPage)}
+        showedCount={showedCount}
         totalCount={totalCount}
         sortOptions={sortOptions}
         sortBy={sortBy}
