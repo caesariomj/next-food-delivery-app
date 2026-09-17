@@ -1,7 +1,8 @@
-import type { SortOptionValue } from "@/types/pagination";
+import type { SortOption } from "@/types/pagination";
 
-import { SORT_OPTIONS } from "../constants/pagination";
-
-export function isSortValue(value: string | null): value is SortOptionValue {
-  return SORT_OPTIONS.some((option) => option.value === value);
+export function isSortValue<T extends readonly SortOption[]>(
+  options: T,
+  value: string | null
+): value is T[number]["value"] {
+  return options.some((option) => option.value === value);
 }

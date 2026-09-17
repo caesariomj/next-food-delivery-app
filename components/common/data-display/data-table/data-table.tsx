@@ -18,7 +18,7 @@ import {
 import { cn } from "@/lib/utils/cn";
 import { toNumber } from "@/lib/utils/number";
 import { isSortValue } from "@/lib/utils/pagination";
-import type { SortOptionValue } from "@/types/pagination";
+import type { SortOption, SortOptionValue } from "@/types/pagination";
 
 import DataTableBulkActions from "./data-table-bulk-actions";
 import DataTablePagination from "./data-table-pagination";
@@ -32,6 +32,7 @@ type DataTableProps = {
   totalCount: number;
   selectedCount: number;
   columnCount: number;
+  sortOptions: SortOption[];
   bulkActions: ReactNode;
   header: ReactNode;
   children: ReactNode;
@@ -45,6 +46,7 @@ export default function DataTable({
   totalCount,
   selectedCount,
   columnCount,
+  sortOptions,
   bulkActions,
   header,
   children,
@@ -55,7 +57,7 @@ export default function DataTable({
   const searchParams = useSearchParams();
 
   const sortByParam = searchParams.get("sort");
-  const sortBy = isSortValue(sortByParam)
+  const sortBy = isSortValue(sortOptions, sortByParam)
     ? sortByParam
     : PAGINATION_DEFAULT_SORT;
   const currentPage =
@@ -91,6 +93,7 @@ export default function DataTable({
         entityNamePlural={entityNamePlural}
         showedCount={Number(perPage)}
         totalCount={totalCount}
+        sortOptions={sortOptions}
         sortBy={sortBy}
         onSearchChangeAction={handleSearchChange}
         onSortChangeAction={handleSortChange}

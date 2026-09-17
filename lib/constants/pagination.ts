@@ -8,7 +8,7 @@ export const PAGINATION_PER_PAGE_OPTIONS = Array.from(
 );
 export const PAGINATION_DEFAULT_SORT: SortOptionValue = "created_at_desc";
 
-export const SORT_OPTIONS = [
+export const BASE_SORT_OPTIONS = [
   { value: "created_at_desc", label: "Newest" },
   { value: "created_at_asc", label: "Oldest" },
   { value: "name_asc", label: "Name: A-Z" },
