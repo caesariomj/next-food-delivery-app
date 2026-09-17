@@ -1,16 +1,12 @@
-import type { Prisma, Cuisine } from "@/generated/prisma/client";
+import type { Cuisine, Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
-export async function deleteCuisineByPublicIds(
-  args?: Prisma.CuisineDeleteManyArgs
-): Promise<Prisma.BatchPayload> {
-  return await prisma.cuisine.deleteMany(args);
-}
+import type { CuisineStatsResult } from "../application/cuisine-types";
 
-export async function findCuisines<T extends Prisma.CuisineFindManyArgs>(
-  args?: Prisma.SelectSubset<T, Prisma.CuisineFindManyArgs>
-) {
-  return await prisma.cuisine.findMany(args);
+export async function insertCuisine(
+  args: Prisma.CuisineCreateArgs
+): Promise<Cuisine> {
+  return await prisma.cuisine.create(args);
 }
 
 export async function findCuisineByName(
@@ -19,30 +15,10 @@ export async function findCuisineByName(
   return await prisma.cuisine.findUnique(args);
 }
 
-export async function insertCuisine(
-  name: string,
-  slug: string,
-  isActive: boolean,
-  description?: string,
-  icon?: string
-): Promise<Cuisine> {
-  return await prisma.cuisine.create({
-    data: { name, slug, description, icon, isActive },
-  });
-}
-
-export async function updateCuisine(
-  publicId: string,
-  name: string,
-  slug: string,
-  isActive: boolean,
-  description?: string,
-  icon?: string
-): Promise<Cuisine> {
-  return await prisma.cuisine.update({
-    where: { publicId },
-    data: { name, slug, description, icon, isActive },
-  });
+export async function findCuisines<T extends Prisma.CuisineFindManyArgs>(
+  args?: Prisma.SelectSubset<T, Prisma.CuisineFindManyArgs>
+) {
+  return await prisma.cuisine.findMany(args);
 }
 
 export async function isCuisineNameTaken(
@@ -62,4 +38,40 @@ export async function isCuisineNameTaken(
       },
     })
     .then((result) => Boolean(result));
+}
+
+export async function countCuisines(): Promise<CuisineStatsResult> {
+  const [total, active, cuisinesWithRestaurantCount] = await Promise.all([
+    prisma.cuisine.count(),
+    prisma.cuisine.count({
+      where: {
+        isActive: true,
+      },
+    }),
+    prisma.restaurantCuisine.count(),
+  ]);
+
+  return {
+    total,
+    active,
+    linkedRestaurants: cuisinesWithRestaurantCount,
+  };
+}
+
+export async function updateCuisine(
+  args: Prisma.CuisineUpdateArgs
+): Promise<Cuisine> {
+  return await prisma.cuisine.update(args);
+}
+
+export async function updateCuisines(
+  args: Prisma.CuisineUpdateManyArgs
+): Promise<Prisma.BatchPayload> {
+  return await prisma.cuisine.updateMany(args);
+}
+
+export async function deleteCuisineByPublicIds(
+  args?: Prisma.CuisineDeleteManyArgs
+): Promise<Prisma.BatchPayload> {
+  return await prisma.cuisine.deleteMany(args);
 }
