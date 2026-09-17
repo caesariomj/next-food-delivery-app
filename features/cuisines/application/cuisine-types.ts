@@ -12,18 +12,6 @@ export type CreateCuisineResult =
       reason: "NAME_EXISTS" | "UNKNOWN_ERROR";
     };
 
-export type DeleteCuisineResult =
-  | {
-      success: true;
-      data: {
-        affected: number;
-      };
-    }
-  | {
-      success: false;
-      reason: "CUISINE_NONEXISTENT" | "UNKNOWN_ERROR";
-    };
-
 export type UpdateCuisineResult =
   | {
       success: true;
@@ -35,6 +23,29 @@ export type UpdateCuisineResult =
       success: false;
       reason: "NAME_EXISTS" | "UNKNOWN_ERROR";
     };
+
+export type BulkActionCuisineResult =
+  | {
+      success: true;
+      data: {
+        affected: number;
+      };
+    }
+  | {
+      success: false;
+      reason: "CUISINE_NONEXISTENT" | "UNKNOWN_ERROR";
+    };
+
+export const landingPageHeroCuisineSelect = {
+  publicId: true,
+  name: true,
+  slug: true,
+  icon: true,
+} satisfies Prisma.CuisineSelect;
+
+export type LandingPageHeroCuisine = Prisma.CuisineGetPayload<{
+  select: typeof landingPageHeroCuisineSelect;
+}>;
 
 export const landingPageCuisineSelect = {
   publicId: true,
@@ -48,17 +59,31 @@ export const landingPageCuisineSelect = {
   },
 } satisfies Prisma.CuisineSelect;
 
-export const landingPageHeroCuisineSelect = {
-  publicId: true,
-  name: true,
-  slug: true,
-  icon: true,
-} satisfies Prisma.CuisineSelect;
-
 export type LandingPageCuisine = Prisma.CuisineGetPayload<{
   select: typeof landingPageCuisineSelect;
 }>;
 
-export type LandingPageHeroCuisine = Prisma.CuisineGetPayload<{
-  select: typeof landingPageHeroCuisineSelect;
+export const dashboardPageCuisineSelect = {
+  publicId: true,
+  name: true,
+  slug: true,
+  icon: true,
+  description: true,
+  isActive: true,
+  createdAt: true,
+  _count: {
+    select: {
+      restaurants: true,
+    },
+  },
+} satisfies Prisma.CuisineSelect;
+
+export type DashboardPageCuisine = Prisma.CuisineGetPayload<{
+  select: typeof dashboardPageCuisineSelect;
 }>;
+
+export type CuisineStatsResult = {
+  total: number;
+  active: number;
+  linkedRestaurants: number;
+};
