@@ -10,12 +10,12 @@ import {
 import { cn } from "@/lib/utils/cn";
 
 type DetailDialogProps = {
-  className?: string;
   title: string;
   description: string;
   children: ReactNode;
   isOpen: boolean;
-  setIsOpenAction: Dispatch<SetStateAction<boolean>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  className?: string;
 };
 
 export default function DetailDialog({
@@ -23,11 +23,11 @@ export default function DetailDialog({
   description,
   children,
   isOpen,
-  setIsOpenAction,
+  setIsOpen,
   className,
 }: DetailDialogProps) {
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpenAction}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
@@ -35,7 +35,9 @@ export default function DetailDialog({
             {description}
           </DialogDescription>
         </DialogHeader>
-        <div className={cn("px-6 pb-6", className)}>{children}</div>
+        <div className={cn("max-h-[80vh] overflow-y-auto p-6", className)}>
+          {children}
+        </div>
       </DialogContent>
     </Dialog>
   );

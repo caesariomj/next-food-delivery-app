@@ -23,9 +23,9 @@ type ConfirmationDialogProps<T> = {
   title: string;
   selectedItems: T[] | null;
   isOpen: boolean;
-  setIsOpenAction: Dispatch<SetStateAction<boolean>>;
-  onConfirmedAction: () => void;
-  pending: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  onConfirmed: () => void;
+  isPending: boolean;
 };
 
 export default function ConfirmationDialog<T>({
@@ -33,9 +33,9 @@ export default function ConfirmationDialog<T>({
   title,
   selectedItems,
   isOpen,
-  setIsOpenAction,
-  onConfirmedAction,
-  pending,
+  setIsOpen,
+  onConfirmed,
+  isPending,
 }: ConfirmationDialogProps<T>) {
   const itemCount = selectedItems?.length ?? 0;
   const itemLabel =
@@ -56,7 +56,7 @@ export default function ConfirmationDialog<T>({
   }
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpenAction}>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader className="h-72">
           <AlertDialogTitle>{title}</AlertDialogTitle>
@@ -68,11 +68,11 @@ export default function ConfirmationDialog<T>({
             undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="">
+        <AlertDialogFooter>
           <AlertDialogCancel asChild>
             <button
-              className="w-full cursor-pointer bg-background px-8 py-4 text-lg font-semibold text-foreground transition-colors duration-200 ease-in-out hover:bg-foreground/10 focus:bg-foreground/10 focus:outline-none"
-              disabled={pending}
+              className="w-full cursor-pointer border-t-4 border-r-0 border-foreground bg-background px-8 py-4 text-lg font-semibold text-foreground transition-colors duration-200 ease-in-out hover:bg-foreground/10 focus:bg-foreground/10 focus:outline-none sm:border-t-0 sm:border-r-4"
+              disabled={isPending}
             >
               Cancel
             </button>
@@ -80,10 +80,10 @@ export default function ConfirmationDialog<T>({
           <AlertDialogAction asChild>
             <button
               className="w-full cursor-pointer bg-destructive px-8 py-4 text-lg font-semibold text-background capitalize transition-colors duration-200 ease-in-out hover:bg-error-600 focus:bg-error-600 focus:outline-none"
-              onClick={onConfirmedAction}
-              disabled={pending}
+              onClick={onConfirmed}
+              disabled={isPending}
             >
-              {pending ? (
+              {isPending ? (
                 <>
                   <Spinner />
                   <span>{actionPendingLabel}</span>
