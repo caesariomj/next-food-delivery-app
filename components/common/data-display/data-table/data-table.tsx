@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+import { useSidebar } from "@/components/ui/sidebar";
 import {
   Table,
   TableBody,
@@ -58,6 +59,8 @@ export default function DataTable({
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const { open: isSidebarOpen } = useSidebar();
+
   const sortByParam = searchParams.get("sort");
   const sortBy = isSortValue(sortOptions, sortByParam)
     ? sortByParam
@@ -105,7 +108,12 @@ export default function DataTable({
           {bulkActions}
         </DataTableBulkActions>
       )}
-      <div className="max-w-full border-4 border-foreground bg-background neo-shadow sm:max-w-[calc(100vw-23rem)]">
+      <div
+        className={cn(
+          "max-w-full border-4 border-foreground bg-background neo-shadow",
+          isSidebarOpen ? "sm:max-w-[calc(100vw-23rem)]" : "sm:max-w-screen"
+        )}
+      >
         <Table>
           <TableHeader>
             <TableRow>{header}</TableRow>
