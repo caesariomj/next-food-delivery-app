@@ -17,9 +17,12 @@ model Restaurant {
   coverImageUrl             String?                       @map("cover_image_url")
   phone                     String
   email                     String?
+  countryCode               String                        @map("country_code")
+  administrativeArea        String                        @map("administrative_area")
+  locality                  String
   address                   String
-  latitude                  Decimal?                      @db.Decimal(9, 6)
-  longitude                 Decimal?                      @db.Decimal(9, 6)
+  latitude                  Decimal                       @db.Decimal(9, 6)
+  longitude                 Decimal                       @db.Decimal(9, 6)
   status                    RestaurantStatus              @default(ONBOARDING)
   createdAt                 DateTime                      @default(now()) @map("created_at")
   updatedAt                 DateTime                      @updatedAt @map("updated_at")
@@ -84,27 +87,25 @@ model RestaurantApplication {
   publicId                          String                            @unique @default(uuid(7)) @map("public_id")
   applicantId                       String                            @map("applicant_id")
   status                            RestaurantApplicationStatus
-  businessName                      String                            @map("business_name")
-  businessPhone                     String                            @map("business_phone")
+  businessName                      String?                           @map("business_name")
+  businessPhone                     String?                           @map("business_phone")
   businessEmail                     String?                           @map("business_email")
   businessImage                     String?                           @map("business_image")
   businessCoverImage                String?                           @map("business_cover_image")
   businessDescription               String?                           @map("business_description")
-  address                           String
+  countryCode                       String?                           @map("country_code")
+  administrativeArea                String?                           @map("administrative_area")
+  locality                          String?
+  address                           String?
   latitude                          Decimal?                          @db.Decimal(9, 6)
   longitude                         Decimal?                          @db.Decimal(9, 6)
   businessLicense                   String?                           @map("business_license")
-  rejectionReason                   String?                           @map("rejection_reason")
-  revisionNotes                     String?                           @map("revision_notes")
-  reviewedById                      String?                           @map("reviewed_by_id")
-  reviewedAt                        DateTime?                         @map("reviewed_at")
-  submittedAt                       DateTime?                         @map("submitted_at")
   createdAt                         DateTime                          @default(now()) @map("created_at")
   updatedAt                         DateTime                          @updatedAt @map("updated_at")
 
   applicant                         User                              @relation("ApplicantApplications", fields: [applicantId], references: [id], onDelete: Cascade)
-  reviewer                          User?                             @relation("ReviewerApplications", fields: [reviewedById], references: [id], onDelete: SetNull)
   restaurantApplicationCuisines     RestaurantApplicationCuisine[]
+  statusHistory                     RestaurantApplicationStatusHistory[]
 
   @@map("restaurant_applications")
 }
@@ -118,4 +119,19 @@ model RestaurantApplicationCuisine {
 
   @@id([restaurantApplicationId, cuisineId])
   @@map("restaurant_application_cuisines")
+}
+
+model RestaurantApplicationStatusHistory {
+  id                Int                             @id @default(autoincrement())
+  applicationId     Int                             @map("application_id")
+  reviewedById      String?                         @map("reviewed_by_id")
+  status            RestaurantApplicationStatus
+  note              String?
+  createdAt         DateTime                        @default(now()) @map("created_at")
+
+  application       RestaurantApplication           @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  reviewer          User?                           @relation("ReviewerApplications", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([applicationId, createdAt])
+  @@map("restaurant_application_status_histories")
 }

@@ -1,20 +1,26 @@
 model User {
-  id                          String                      @id
-  email                       String                      @unique
-  emailVerified               Boolean                     @default(false) @map("email_verified")
+  id                          String                                    @id
+  email                       String                                    @unique
+  emailVerified               Boolean                                   @default(false) @map("email_verified")
   name                        String
-  phone                       String?                     @unique
+  phone                       String?                                   @unique
   image                       String?
-  createdAt                   DateTime                    @default(now()) @map("created_at")
-  updatedAt                   DateTime                    @updatedAt @map("updated_at")
-  deletedAt                   DateTime?                   @map("deleted_at")
+  countryCode                 String?                                   @map("country_code")
+  administrativeArea          String?                                   @map("administrative_area")
+  locality                    String?
+  address                     String?
+  latitude                    Decimal?                                  @db.Decimal(9, 6)
+  longitude                   Decimal?                                  @db.Decimal(9, 6)
+  createdAt                   DateTime                                  @default(now()) @map("created_at")
+  updatedAt                   DateTime                                  @updatedAt @map("updated_at")
+  deletedAt                   DateTime?                                 @map("deleted_at")
 
   sessions                    Session[]
   accounts                    Account[]
-  roles                       UserRole[]                  @relation("UserRoles")
-  assigned                    UserRole[]                  @relation("AssignedRoles")
-  restaurantApplications      RestaurantApplication[]     @relation("ApplicantApplications")
-  reviewedApplications        RestaurantApplication[]     @relation("ReviewerApplications")
+  roles                       UserRole[]                                @relation("UserRoles")
+  assigned                    UserRole[]                                @relation("AssignedRoles")
+  restaurantApplications      RestaurantApplication[]                   @relation("ApplicantApplications")
+  reviewedApplications        RestaurantApplicationStatusHistory[]      @relation("ReviewerApplications")
   restaurants                 UserRestaurant[]
 
   @@index([createdAt])
