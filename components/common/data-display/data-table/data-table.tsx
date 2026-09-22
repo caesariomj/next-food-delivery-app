@@ -35,7 +35,7 @@ type DataTableProps = {
   selectedCount: number;
   columnCount: number;
   sortOptions: readonly SortOption[];
-  bulkActions: ReactNode;
+  bulkActions?: ReactNode;
   header: ReactNode;
   children: ReactNode;
   className?: string;
