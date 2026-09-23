@@ -83,29 +83,29 @@ enum RestaurantApplicationStatus {
 }
 
 model RestaurantApplication {
-  id                                Int                               @id @default(autoincrement())
-  publicId                          String                            @unique @default(uuid(7)) @map("public_id")
-  applicantId                       String                            @map("applicant_id")
+  id                                Int                                       @id @default(autoincrement())
+  publicId                          String                                    @unique @default(uuid(7)) @map("public_id")
+  applicantId                       String                                    @map("applicant_id")
   status                            RestaurantApplicationStatus
-  businessName                      String?                           @map("business_name")
-  businessPhone                     String?                           @map("business_phone")
-  businessEmail                     String?                           @map("business_email")
-  businessImage                     String?                           @map("business_image")
-  businessCoverImage                String?                           @map("business_cover_image")
-  businessDescription               String?                           @map("business_description")
-  countryCode                       String?                           @map("country_code")
-  administrativeArea                String?                           @map("administrative_area")
+  businessName                      String?                                   @map("business_name")
+  businessPhone                     String?                                   @map("business_phone")
+  businessEmail                     String?                                   @map("business_email")
+  businessImage                     String?                                   @map("business_image")
+  businessCoverImage                String?                                   @map("business_cover_image")
+  businessDescription               String?                                   @map("business_description")
+  countryCode                       String?                                   @map("country_code")
+  administrativeArea                String?                                   @map("administrative_area")
   locality                          String?
   address                           String?
-  latitude                          Decimal?                          @db.Decimal(9, 6)
-  longitude                         Decimal?                          @db.Decimal(9, 6)
-  businessLicense                   String?                           @map("business_license")
-  createdAt                         DateTime                          @default(now()) @map("created_at")
-  updatedAt                         DateTime                          @updatedAt @map("updated_at")
+  latitude                          Decimal?                                  @db.Decimal(9, 6)
+  longitude                         Decimal?                                  @db.Decimal(9, 6)
+  createdAt                         DateTime                                  @default(now()) @map("created_at")
+  updatedAt                         DateTime                                  @updatedAt @map("updated_at")
 
-  applicant                         User                              @relation("ApplicantApplications", fields: [applicantId], references: [id], onDelete: Cascade)
+  applicant                         User                                      @relation("ApplicantApplications", fields: [applicantId], references: [id], onDelete: Cascade)
   restaurantApplicationCuisines     RestaurantApplicationCuisine[]
   statusHistory                     RestaurantApplicationStatusHistory[]
+  documents                         RestaurantApplicationDocument[]
 
   @@map("restaurant_applications")
 }
@@ -134,4 +134,21 @@ model RestaurantApplicationStatusHistory {
 
   @@index([applicationId, createdAt])
   @@map("restaurant_application_status_histories")
+}
+
+model RestaurantApplicationDocument {
+  id                  Int                       @id @default(autoincrement())
+  publicId            String                    @unique @default(uuid(7)) @map("public_id")
+  applicationId       Int                       @map("application_id")
+  type                String
+  name                String?
+  documentUrl         String                    @map("document_url")
+  documentNumber      String?                   @map("document_number")
+  issuedAt            DateTime?                 @map("issued_at")
+  expiresAt           DateTime?                 @map("expires_at")
+  createdAt           DateTime                  @default(now()) @map("created_at")
+
+  application         RestaurantApplication     @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@map("restaurant_application_documents")
 }
