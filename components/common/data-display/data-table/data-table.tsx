@@ -103,7 +103,7 @@ export default function DataTable({
         onSearchChangeAction={handleSearchChange}
         onSortChangeAction={handleSortChange}
       />
-      {selectedCount > 0 && (
+      {selectedCount > 0 && bulkActions && (
         <DataTableBulkActions selectedCount={selectedCount}>
           {bulkActions}
         </DataTableBulkActions>
