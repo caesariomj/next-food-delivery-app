@@ -1,3 +1,5 @@
+import { GENERIC_ERROR_MESSAGE } from "@/lib/constants/validation";
+
 export type AuthErrorInfo = {
   title: string;
   message: string;
@@ -72,7 +74,7 @@ const authErrors: Record<string, AuthErrorInfo> = {
 
 const defaultAuthError: AuthErrorInfo = {
   title: "Unexpected Error",
-  message: "Something went wrong.",
+  message: GENERIC_ERROR_MESSAGE,
 };
 
 export function getAuthErrorInfo(code?: string): AuthErrorInfo {

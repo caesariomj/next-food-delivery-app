@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { RiLogoutBoxLine } from "@remixicon/react";
 import { toast } from "sonner";
 
+import { GENERIC_ERROR_MESSAGE } from "@/lib/constants/validation";
 import { cn } from "@/lib/utils/cn";
 
 import { signOut } from "../application/sign-out";
@@ -44,7 +45,7 @@ export default function SignOutButton({
         error,
       });
 
-      toast.error("Something went wrong on our end. Please try again later.");
+      toast.error(GENERIC_ERROR_MESSAGE);
     } finally {
       setIsLoading(false);
     }

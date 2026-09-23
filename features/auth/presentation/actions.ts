@@ -3,6 +3,7 @@
 import { isAPIError } from "better-auth/api";
 import { z } from "zod";
 
+import { GENERIC_ERROR_MESSAGE } from "@/lib/constants/validation";
 import type { FieldError } from "@/types/form";
 
 import { signInWithEmail } from "../application/sign-in-with-email";
@@ -109,7 +110,7 @@ export async function signInAction(
 
     return {
       success: false,
-      message: "Something went wrong on our end. Please try again later.",
+      message: GENERIC_ERROR_MESSAGE,
     };
   }
 }
@@ -196,7 +197,7 @@ export async function signUpAction(
 
     return {
       success: false,
-      message: "Something went wrong on our end. Please try again later.",
+      message: GENERIC_ERROR_MESSAGE,
     };
   }
 }

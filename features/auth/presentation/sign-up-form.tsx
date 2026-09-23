@@ -18,10 +18,11 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { GENERIC_ERROR_MESSAGE } from "@/lib/constants/validation";
 
-import { type SignUpState, signUpAction } from "./actions";
 import { signInWithGoogle } from "../application/sign-in-with-google";
 import { reportAuthError } from "../infrastructure/auth-error-monitoring";
+import { type SignUpState, signUpAction } from "./actions";
 
 const initialState: SignUpState = {
   success: false,
@@ -83,7 +84,7 @@ export default function SignUpForm() {
         error,
       });
 
-      toast.error("Something went wrong on our end. Please try again later.");
+      toast.error(GENERIC_ERROR_MESSAGE);
     } finally {
       setIsGoogleLoading(false);
     }
