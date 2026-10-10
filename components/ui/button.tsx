@@ -6,13 +6,17 @@ import { Slot } from "radix-ui";
 import { cn } from "@/lib/utils/cn";
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 cursor-pointer items-center justify-center rounded-none border-4 border-foreground bg-clip-padding text-base font-bold tracking-wider whitespace-nowrap uppercase transition-all duration-200 ease-in-out outline-none select-none hover:shadow-none focus-visible:shadow-none active:not-aria-[haspopup]:translate-y-1 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-lg dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6",
+  "group/button inline-flex shrink-0 cursor-pointer items-center justify-center rounded-none border-4 border-foreground bg-clip-padding text-base font-bold tracking-wider whitespace-nowrap uppercase transition-all duration-200 ease-in-out outline-none select-none hover:shadow-none focus-visible:shadow-none active:not-aria-[haspopup]:translate-y-1 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 sm:text-lg dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6",
   {
     variants: {
       variant: {
         default: "bg-primary text-foreground hover:bg-primary/80",
         outline:
-          "bg-background hover:bg-foreground/10 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-input/30",
+          "bg-background hover:bg-background/80 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-input/30",
+        "outline-primary":
+          "bg-primary/10 border-primary-600 text-primary-600 hover:bg-primary/20 hover:border-primary-700 hover:text-primary-700 aria-expanded:bg-primary aria-expanded:text-foreground dark:hover:bg-input/30",
+        "outline-destructive":
+          "bg-destructive/10 border-destructive text-destructive hover:bg-destructive/20 hover:border-error-600 hover:text-error-600 aria-expanded:bg-destructive aria-expanded:text-foreground dark:hover:bg-input/30",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:
@@ -20,7 +24,7 @@ const buttonVariants = cva(
         foreground: "bg-foreground text-background",
         background: "bg-background text-foreground",
         destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
+          "bg-destructive text-background hover:bg-destructive/80 focus-visible:border-destructive/80 dark:bg-destructive/80 dark:hover:bg-destructive/80",
         link: "text-primary underline underline-offset-4 hover:underline",
       },
       size: {
@@ -31,7 +35,7 @@ const buttonVariants = cva(
         lg: "h-14 gap-3 px-8 neo-shadow has-data-[icon=inline-end]:pr-5 has-data-[icon=inline-start]:pl-5",
         xl: "h-16 gap-4 px-8 neo-shadow has-data-[icon=inline-end]:pr-5 has-data-[icon=inline-start]:pl-5",
         "2xl":
-          "h-20 gap-4 px-8 neo-shadow-lg has-data-[icon=inline-end]:pr-5 has-data-[icon=inline-start]:pl-5",
+          "h-18 gap-4 px-4 neo-shadow-lg has-data-[icon=inline-end]:pr-5 has-data-[icon=inline-start]:pl-5 sm:h-20 sm:px-8",
         icon: "size-10",
         "icon-xs": "size-7 [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-9",
